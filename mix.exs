@@ -5,31 +5,35 @@ defmodule Addict.Mixfile do
     [app: :addict,
      version: "0.0.1",
      elixir: "~> 1.0",
+     description: description,
+     package: package,
      deps: deps]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type `mix help compile.app` for more information
   def application do
-    [applications: [:phoenix, :cowboy, :logger, :ecto, :bcrypt]]
+    [applications: [:logger, :bcrypt]]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type `mix help deps` for more examples and options
+
   defp deps do
     [{:phoenix, "~> 0.8.0"},
-     {:cowboy, "~> 1.0"},
-     {:postgrex, ">= 0.6.0"},
-     {:ecto, "~> 0.2.6"},
      {:bcrypt, github: "opscode/erlang-bcrypt"},
      {:mailgun, "~> 0.0.2"}]
   end
+
+  defp package do
+    [# These are the default files included in the package
+         files: ["lib", "mix.exs", "README*", "LICENSE*"],
+         contributors: ["Nizar Venturini"],
+         licenses: ["MIT"],
+         links: %{"GitHub" => "https://github.com/trenpixster/addict"}
+    ]
+  end
+
+  defp description do
+    """
+    Addict allows you to manage users on your Phoenix app easily. Register, login and logout is available off-the-shelf.
+    """
+  end
+
 end

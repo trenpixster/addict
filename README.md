@@ -57,9 +57,9 @@ end
 ## How can I use it?
 Just add the following to your `router.ex`:
 ```
-    post "/register", UserController, :register
-    post "/logout", UserController, :logout
-    post "/login", UserController, :login
+    post "/register", Addict.Controller, :register
+    post "/logout", Addict.Controller, :logout
+    post "/login", Addict.Controller, :login
 ```
 
 And use `AddictAuthenticated` plug to validate requests on your controllers:
