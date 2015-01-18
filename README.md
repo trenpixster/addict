@@ -81,10 +81,10 @@ If the user is not logged in and requests for the above action, it will be redir
 
 
 ## TODO
-[ ] Validate user model fields
-[ ] Implement "Forgot password" flow
-[ ] Invite users ability
-[ ] ... whatever else it will definitely come up
+- [ ] Validate user model fields
+- [ ] Implement "Forgot password" flow
+- [ ] Invite users ability
+- [ ] ... whatever else it will definitely come up
 
 ## Contributing
 
