@@ -9,7 +9,7 @@ For now, it allows to register, login and logout your users.
 
 ## On what does it depend?
 Addict depends on:
-- [Phoenix Framework](www.phoenixframework.org)
+- [Phoenix Framework](www.phoenixframework.org)m
 - [Ecto](https://github.com/elixir-lang/ecto)
 - [Mailgun](https://mailgun.com) (Don't have an account? Register for free and get 10000 e-mails per month included)
 
@@ -42,7 +42,7 @@ config :addict, not_logged_in_url: "/error",  # the URL where users will be redi
                 mailgun_key: "apikey-secr3tzapik3y"
 ```
 
-The `email_templates` configuration should point to a model with the following structure:
+The `email_templates` configuration should point to a module with the following structure:
 ```
 defmodule MyApp.MyEmailTemplates do
   def register_template(options) do
