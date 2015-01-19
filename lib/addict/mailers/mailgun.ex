@@ -1,4 +1,4 @@
-defmodule Addict.MailgunMailer do
+defmodule Addict.Mailers.Mailgun do
   require Logger
   use Mailgun.Client, domain: Application.get_env(:addict, :mailgun_domain),
                       key: Application.get_env(:addict, :mailgun_key)

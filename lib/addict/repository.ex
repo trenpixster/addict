@@ -1,4 +1,4 @@
-defmodule AddictRepository do
+defmodule Addict.Repository do
   require Logger
 
   import Ecto.Query

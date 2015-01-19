@@ -1,4 +1,4 @@
-defmodule AddictAuthenticated do
+defmodule Addict.Plugs.Authenticated do
   import Plug.Conn
   use Phoenix.Controller
 

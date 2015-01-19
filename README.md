@@ -62,12 +62,12 @@ Just add the following to your `router.ex`:
     post "/login", Addict.Controller, :login
 ```
 
-And use `AddictAuthenticated` plug to validate requests on your controllers:
+And use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
 ```
 defmodule MyAwesomeApp.PageController do
   use Phoenix.Controller
 
-  plug AddictAuthenticated when action in [:foobar]
+  plug Addict.Plugs.Authenticated when action in [:foobar]
   plug :action
 
   def foobar(conn, _params) do
