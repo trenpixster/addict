@@ -18,6 +18,8 @@ defmodule Addict.Mailers.Mailgun do
   defp handle_error(email, status, json_body) do
     Logger.debug "Unable to send e-mail to #{email}"
     Logger.debug "status: #{status}"
+    IO.inspect json_body
+
     {:error, to_string(status) }
   end
 
