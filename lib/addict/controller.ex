@@ -1,6 +1,6 @@
 defmodule Addict.Controller do
   use Phoenix.Controller
-  alias AddictManagerInteractor, as: AddictManager
+  alias Addict.ManagerInteractor, as: AddictManager
 
   plug :action
 

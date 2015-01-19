@@ -1,13 +1,13 @@
-defmodule AddictManagerInteractor do
+defmodule Addict.ManagerInteractor do
   require Logger
 
-  def create(email, username, password, repo \\ AddictRepository, mailer \\ Addict.EmailGateway) do
+  def create(email, username, password, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
     generate_password(password)
     |> create_username(email, username, repo)
     |> send_welcome_email(mailer)
   end
 
-  def verify_password(email, password, repo \\ AddictRepository) do
+  def verify_password(email, password, repo \\ Addict.Repository) do
     user = repo.find_by_email email
 
     if valid_credentials(user, password) do
