@@ -3,10 +3,11 @@ defmodule Addict.Repository do
 
   import Ecto.Query
   @user Application.get_env(:addict, :user)
+  @db Application.get_env(:addict, :db)
 
   def create(salt, hash, email, username) do
     try do
-      new_user = db.insert(struct(@user,%{
+      new_user = @db.insert(struct(@user,%{
         email: email,
         hash: hash,
         salt: salt,
@@ -24,15 +25,10 @@ defmodule Addict.Repository do
   def find_by_email(email) do
     try do
       query = from u in @user, where: u.email == ^email
-      db.one query
+      @db.one query
     rescue
       e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
     end
-  end
-
-  def db do
-    IO.inspect Application.get_all_env(:addict)
-    Application.get_env(:addict, :db)
   end
 
 end
