@@ -1,12 +1,25 @@
 defmodule Addict.ManagerInteractor do
+  @moduledoc """
+  Addict Manager Interactor responsability is to provide simple primtives for
+  user operations.
+  """
   require Logger
 
+
+  @doc """
+  Creates a user on the database and sends the welcoming e-mail via the defined
+  `mailer`.
+  """
   def create(email, username, password, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
     generate_password(password)
     |> create_username(email, username, repo)
     |> send_welcome_email(mailer)
   end
 
+  @doc """
+  Verifies if the provided `password` is the same as the `password` for the user
+  associated with the given `email`.
+  """
   def verify_password(email, password, repo \\ Addict.Repository) do
     user = repo.find_by_email email
 

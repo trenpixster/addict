@@ -1,8 +1,15 @@
 defmodule Addict.Mailers.Mailgun do
+  @moduledoc """
+  Wrapper for Mailgun client that handles eventual errors.
+  """
   require Logger
   use Mailgun.Client, domain: Application.get_env(:addict, :mailgun_domain),
                       key: Application.get_env(:addict, :mailgun_key)
 
+  @doc """
+  Sends an e-mail to a user. Returns a tuple with `{:ok, result}` on success or
+  `{:error, status_error}` on failure.
+  """
   def send_email_to_user(email, from, subject, html_body) do
     result = send_email to: email,
                  from: from,

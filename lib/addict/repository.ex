@@ -1,10 +1,21 @@
 defmodule Addict.Repository do
+  @moduledoc """
+  Addict Repository is responsible for interacting with the DB on the query
+  level in order to manipulate user data.
+  """
   require Logger
 
   import Ecto.Query
+
   @user Application.get_env(:addict, :user)
   @db Application.get_env(:addict, :db)
 
+  @doc """
+  Creates a new user on the database with the given parameters.
+
+  It either returns a tuple with `{:ok, user}` or, in case an error
+  happens, a tuple with `{:error, error_message}`
+  """
   def create(salt, hash, email, username) do
     try do
       new_user = @db.insert(struct(@user,%{
@@ -22,6 +33,12 @@ defmodule Addict.Repository do
     end
   end
 
+  @doc """
+  Retrieves a single user from the database based on the user's e-mail.
+
+  It either returns the `user` or, in case an error occurs, a tuple with
+  `{:error, error_message}`. If no user exists, `nil` will be returned.
+  """
   def find_by_email(email) do
     try do
       query = from u in @user, where: u.email == ^email
