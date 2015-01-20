@@ -17,6 +17,7 @@ defmodule Addict.Mixfile do
 
   defp deps do
     [{:phoenix, "~> 0.8.0"},
+     {:ecto, "~> 0.6.0"},
      {:bcrypt, github: "opscode/erlang-bcrypt"},
      {:mailgun, "~> 0.0.2"}]
   end
