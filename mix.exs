@@ -7,23 +7,30 @@ defmodule Addict.Mixfile do
      elixir: "~> 1.0",
      description: description,
      package: package,
-     deps: deps]
+     deps: deps(Mix.env)]
   end
 
   def application do
     [applications: [:logger, :bcrypt]]
   end
 
+  defp deps(:test) do
+    [{:cowboy, "~> 1.0"}, {:mock, "~> 0.1.0"}] ++ deps(:prod)
+  end
 
-  defp deps do
+  defp deps(:prod) do
     [{:phoenix, "~> 0.8.0"},
      {:ecto, "~> 0.6.0"},
      {:bcrypt, github: "opscode/erlang-bcrypt"},
      {:mailgun, "~> 0.0.2"}]
   end
 
+  defp deps(_) do
+    deps(:prod)
+  end
+
   defp package do
-    [# These are the default files included in the package
+    [
          files: ["lib", "mix.exs", "README*", "LICENSE*"],
          contributors: ["Nizar Venturini"],
          licenses: ["MIT"],
