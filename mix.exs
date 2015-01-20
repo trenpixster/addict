@@ -15,11 +15,12 @@ defmodule Addict.Mixfile do
   end
 
   defp deps(:test) do
-    [{:cowboy, "~> 1.0"}, {:mock, "~> 0.1.0"}] ++ deps(:prod)
+    [{:mock, "~> 0.1.0"}] ++ deps(:prod)
   end
 
   defp deps(:prod) do
-    [{:phoenix, "~> 0.8.0"},
+    [{:cowboy, "~> 1.0"},
+     {:phoenix, "~> 0.8.0"},
      {:ecto, "~> 0.6.0"},
      {:bcrypt, github: "opscode/erlang-bcrypt"},
      {:mailgun, "~> 0.0.2"}]
