@@ -22,7 +22,7 @@ defmodule Addict.Plugs.Authenticated do
   redirect to `/error`.
   """
   def call(conn, _) do
-    fetch_session(conn)
+    conn = fetch_session(conn)
 
     if get_session(conn, :logged_in) do
       Map.put(conn, :current_user, get_session(conn, :current_user))
@@ -32,7 +32,7 @@ defmodule Addict.Plugs.Authenticated do
   end
 
   def not_logged_in_url do
-    Application.get_env(:addict, :not_logged_in_url) || "/error"
+    Application.get_env(:addict, :not_logged_in_url, "/error")
   end
 
 end
