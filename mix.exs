@@ -11,7 +11,15 @@ defmodule Addict.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :bcrypt]]
+    [applications: applications(Mix.env)]
+  end
+
+  defp applications(:test) do
+    [:plug] ++ applications(:prod)
+  end
+
+  defp applications(_) do
+    [:logger, :bcrypt]
   end
 
   defp deps(:test) do
