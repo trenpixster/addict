@@ -14,8 +14,8 @@ defmodule Addict.Plugs.Authenticated do
   @doc """
   Call represents the use of the plug itself.
 
-  When called, it will populate `conn` with the `current_user`, so it is
-  possible to always retrieve the user via `conn[:current_user]`.
+  When called, it will assign `current_user` to `conn`, so it is
+  possible to always retrieve the user via `conn.assigns.current_user`.
 
   In case the user is not logged in, it will redirect the request to
   the Application :addict :not_logged_in_url page. If none is defined, it will
@@ -25,7 +25,7 @@ defmodule Addict.Plugs.Authenticated do
     conn = fetch_session(conn)
 
     if get_session(conn, :logged_in) do
-      Map.put(conn, :current_user, get_session(conn, :current_user))
+      assign(conn, :current_user, get_session(conn, :current_user))
     else
       conn |> redirect(to: not_logged_in_url) |> halt
     end
