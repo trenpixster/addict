@@ -31,7 +31,7 @@ The user model must have at least the following schema:
 
 There are some application configurations you must add to your `configs.ex`:
 
-```
+```elixir
 config :addict, not_logged_in_url: "/error",  # the URL where users will be redirected to
                 db: MyApp.MyRepo,
                 user: MyApp.MyUser,
@@ -43,7 +43,7 @@ config :addict, not_logged_in_url: "/error",  # the URL where users will be redi
 ```
 
 The `email_templates` configuration should point to a module with the following structure:
-```
+```elixir
 defmodule MyApp.MyEmailTemplates do
   def register_template(options) do
     """
@@ -56,14 +56,14 @@ end
 
 ## How can I use it?
 Just add the following to your `router.ex`:
-```
+```elixir
     post "/register", Addict.Controller, :register
     post "/logout", Addict.Controller, :logout
     post "/login", Addict.Controller, :login
 ```
 
 And use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
-```
+```elixir
 defmodule MyAwesomeApp.PageController do
   use Phoenix.Controller
 
