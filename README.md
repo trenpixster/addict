@@ -45,7 +45,7 @@ config :addict, not_logged_in_url: "/error",  # the URL where users will be redi
 The `email_templates` configuration should point to a module with the following structure:
 ```elixir
 defmodule MyApp.MyEmailTemplates do
-  def register_template(options) do
+  def register_template(user) do
     """
       <h1>This is the HTML the user will receive upon registering</h1>
       You can access the user attributes: #{user.email}
