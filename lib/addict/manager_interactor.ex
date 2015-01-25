@@ -5,6 +5,8 @@ defmodule Addict.ManagerInteractor do
   """
   require Logger
 
+  @derivation Application.get_env(:addict, :derivation) || Comeonin.Pbkdf2
+
   @doc """
   Throws exception when user params is invalid.
   """
@@ -39,8 +41,7 @@ defmodule Addict.ManagerInteractor do
   """
   def verify_password(email, password, repo \\ Addict.Repository) do
     user = repo.find_by_email email
-
-    if valid_credentials(user, password) do
+    if @derivation.checkpw(password, user.hash) do
       {:ok, user}
     else
       {:error, "incorrect user or password"}
@@ -67,34 +68,33 @@ defmodule Addict.ManagerInteractor do
   Resets the password for the user with the given `recovery_hash`.
   """
   def reset_password(recovery_hash, password, _, repo \\ Addict.Repository) do
-    {hash, salt, _} = generate_password(%{"password" => password})
+    {hash, _} = generate_password(%{"password" => password})
     repo.find_by_recovery_hash(recovery_hash)
-    |> reset_user_password(hash, salt, repo)
+    |> reset_user_password(hash, repo)
   end
 
   #
   # Private functions
   #
 
-  defp reset_user_password(nil,_,_,_) do
+  defp reset_user_password(nil,_,_) do
     {:error, "invalid recovery hash"}
   end
 
-  defp reset_user_password({:error, message},_,_,_) do
+  defp reset_user_password({:error, message},_,_) do
     {:error, message}
   end
 
-  defp reset_user_password(user, hash, salt, repo) do
+  defp reset_user_password(user, hash, repo) do
     IO.inspect user
-    repo.change_password(user, hash, salt)
+    repo.change_password(user, hash)
   end
 
 
   defp prepare_password_recovery(email, repo) do
-    {:ok, salt} = :bcrypt.gen_salt()
-    salt = salt |> to_string
+    hash = @derivation.hashpwsalt "1"
     repo.find_by_email(email)
-    |> repo.add_recovery_hash(salt)
+    |> repo.add_recovery_hash(hash)
   end
 
   defp validate_params(nil) do
@@ -110,10 +110,9 @@ defmodule Addict.ManagerInteractor do
     end
   end
 
-  defp create_username({hash, salt, user_params}, repo) do
+  defp create_username({hash, user_params}, repo) do
     user_params = Map.delete(user_params, "password")
     |> Map.put("hash", hash)
-    |> Map.put("salt", salt)
     repo.create(user_params)
   end
 
@@ -153,17 +152,10 @@ defmodule Addict.ManagerInteractor do
     user.hash == generate_hash_from_salt(password, user.salt)
   end
 
-  defp generate_hash_from_salt(password, salt) do
-    {:ok, hash} = :bcrypt.hashpw(password, salt)
-    hash |> to_string |> String.slice(29,61)
-  end
 
   defp generate_password(user_params) do
-    {:ok, salt} = :bcrypt.gen_salt()
-    {:ok, hash} = :bcrypt.hashpw(user_params["password"], salt)
-    salt = salt |> to_string
-    hash = hash |> to_string |> String.slice(29,61)
-    {hash, salt, user_params}
+    hash = @derivation.hashpwsalt user_params["password"]
+    {hash, user_params}
   end
 
 end

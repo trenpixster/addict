@@ -52,7 +52,7 @@ defmodule RepoStub do
     {:ok, %{email: "test@example.com"}}
   end
 
-  def change_password(_,_,_) do
+  def change_password(_,_) do
     {:ok, %{email: "test@example.com"}}
   end
 
