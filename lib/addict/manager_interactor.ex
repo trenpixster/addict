@@ -42,10 +42,25 @@ defmodule Addict.ManagerInteractor do
   #
   # Private functions
   #
-  defp create_username({hash, salt}, email, username, repo) do
-    repo.create(salt, hash, email, username)
+  defp validate_params(nil) do
+    throw "Unable to create user, invalid hash: nil"
   end
 
+  defp validate_params(user_params) do
+    case is_nil(user_params["email"])
+         or is_nil(user_params["password"])
+         or is_nil(user_params["username"]) do
+      false -> user_params
+      true -> throw "Unable to create user, invalid hash. Required params: email, password, username"
+    end
+  end
+
+  defp create_username({hash, salt, user_params}, repo) do
+    user_params = Map.delete(user_params, "password")
+    |> Map.put("hash", hash)
+    |> Map.put("salt", salt)
+    repo.create(user_params)
+  end
   defp send_welcome_email({:ok, user}, mailer) do
     result = mailer.send_welcome_email(user)
     case result do
@@ -71,12 +86,12 @@ defmodule Addict.ManagerInteractor do
     hash |> to_string |> String.slice(29,61)
   end
 
-  defp generate_password(password) do
+  defp generate_password(user_params) do
     {:ok, salt} = :bcrypt.gen_salt()
-    {:ok, hash} = :bcrypt.hashpw(password, salt)
+    {:ok, hash} = :bcrypt.hashpw(user_params["password"], salt)
     salt = salt |> to_string
     hash = hash |> to_string |> String.slice(29,61)
-    {hash, salt}
+    {hash, salt, user_params}
   end
 
 end
