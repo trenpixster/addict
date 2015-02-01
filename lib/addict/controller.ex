@@ -50,6 +50,17 @@ defmodule Addict.Controller do
     |> do_login(conn)
   end
 
+  @doc """
+  Entry point for asking for a new password.
+
+  Params need to be populated with `email`
+  """
+  def recover_password(conn, params) do
+    email = params["email"]
+
+    AddictManager.recover_password(email)
+    |> do_password_recover(conn)
+  end
   #
   # Private functions
   #
@@ -78,6 +89,18 @@ defmodule Addict.Controller do
     conn
     |> put_status(400)
     |> json %{message: "invalid email or password"}
+  end
+
+  defp do_password_recover({:ok, _}, conn) do
+    conn
+    |>put_status(200)
+    |> json %{message: "email sent"}
+  end
+
+  defp do_password_recover({:error, message}, conn) do
+    conn
+    |> put_status(400)
+    |> json %{message: message}
   end
 
   defp add_session(conn, user) do

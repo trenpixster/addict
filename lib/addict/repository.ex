@@ -26,6 +26,25 @@ defmodule Addict.Repository do
     end
   end
 
+  def add_recovery_hash(nil, hash) do
+    {:error, "invalid user"}
+  end
+
+  @doc """
+  Adds a recovery hash to the user.
+
+  It either returns a tuple with `{:ok, user}` or, in case an error
+  happens, a tuple with `{:error, error_message}`
+  """
+  def add_recovery_hash(user, hash) do
+    try do
+      user = %{user | recovery_hash: hash}
+
+      {:ok, @db.update(user)}
+    rescue
+      e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
+    end
+  end
   @doc """
   Retrieves a single user from the database based on the user's e-mail.
 

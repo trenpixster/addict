@@ -26,6 +26,14 @@ defmodule Addict.ManagerInteractor do
   end
 
   @doc """
+  Sends an e-mail to the user with a link to recover the password.
+  """
+  def recover_password(email, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
+    prepare_password_recovery(email, repo)
+    |> send_password_recovery_email(mailer)
+  end
+
+  @doc """
   Verifies if the provided `password` is the same as the `password` for the user
   associated with the given `email`.
   """
@@ -42,6 +50,13 @@ defmodule Addict.ManagerInteractor do
   #
   # Private functions
   #
+  defp prepare_password_recovery(email, repo) do
+    {:ok, salt} = :bcrypt.gen_salt()
+    salt = salt |> to_string
+    repo.find_by_email(email)
+    |> repo.add_recovery_hash(salt)
+  end
+
   defp validate_params(nil) do
     throw "Unable to create user, invalid hash: nil"
   end
@@ -61,6 +76,22 @@ defmodule Addict.ManagerInteractor do
     |> Map.put("salt", salt)
     repo.create(user_params)
   end
+  defp send_password_recovery_email({:ok, nil}, _) do
+    {:error, "Unable to send recovery e-mail"}
+  end
+
+  defp send_password_recovery_email({:ok, user}, mailer) do
+    result = mailer.send_password_recovery_email(user)
+    case result do
+      {:ok, _} -> {:ok, user}
+      {:error, message} -> {:error, message}
+    end
+  end
+
+  defp send_password_recovery_email({:error, _}, _) do
+    {:error, "Unable to send recovery e-mail"}
+  end
+
   defp send_welcome_email({:ok, user}, mailer) do
     result = mailer.send_welcome_email(user)
     case result do
