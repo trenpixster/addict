@@ -1,0 +1,14 @@
+language: erlang
+
+otp_release:
+  - 17.0
+  - 17.1
+  - 17.3
+
+sudo: false
+
+script: "make compile && rm -rf .git && make test"
+
+notifications:
+  recipients:
+    - nizar.venturini@gmail.com
