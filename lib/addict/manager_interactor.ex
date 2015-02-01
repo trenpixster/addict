@@ -5,14 +5,23 @@ defmodule Addict.ManagerInteractor do
   """
   require Logger
 
+  @doc """
+  Throws exception when user params is invalid.
+  """
+  def create(nil) do
+    throw "Invalid User hash: nil"
+  end
 
   @doc """
   Creates a user on the database and sends the welcoming e-mail via the defined
   `mailer`.
+
+  Required fields in `user_params` `Dict` are: `email`, `password`, `username`.
   """
-  def create(email, username, password, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
-    generate_password(password)
-    |> create_username(email, username, repo)
+  def create(user_params, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
+    validate_params(user_params)
+    |> generate_password
+    |> create_username(repo)
     |> send_welcome_email(mailer)
   end
 

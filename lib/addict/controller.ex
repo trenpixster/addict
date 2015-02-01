@@ -16,12 +16,8 @@ defmodule Addict.Controller do
   successful creation, or `400` for when an error occurs.
   On success, it also logs the new user in.
   """
-  def register(conn, params) do
-    email = params["email"]
-    password = params["password"]
-    username = params["username"]
-
-    AddictManager.create(email, username, password)
+  def register(conn, user_params) do
+    AddictManager.create(user_params)
     |> do_register(conn)
   end
 

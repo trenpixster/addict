@@ -16,17 +16,10 @@ defmodule Addict.Repository do
   It either returns a tuple with `{:ok, user}` or, in case an error
   happens, a tuple with `{:error, error_message}`
   """
-  def create(salt, hash, email, username) do
+  def create(user_params) do
     try do
-      new_user = @db.insert(struct(@user,%{
-        email: email,
-        hash: hash,
-        salt: salt,
-        username: username,
-        created_at: Ecto.DateTime.utc(),
-        updated_at: Ecto.DateTime.utc()
-      }))
-
+      user_params = for {key, val} <- user_params, into: %{}, do: {String.to_atom(key), val}
+      new_user = @db.insert(struct(@user,user_params))
       {:ok, new_user}
     rescue
       e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
