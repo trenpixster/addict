@@ -29,7 +29,6 @@ defmodule Addict.Controller do
   """
   def logout(conn, _) do
     fetch_session(conn)
-    |> delete_session(:logged_in)
     |> delete_session(:current_user)
     |> put_status(200)
     |> json %{message: "logged out"}
@@ -83,7 +82,6 @@ defmodule Addict.Controller do
 
   defp add_session(conn, user) do
     conn
-    |> put_session(:logged_in, true)
     |> put_session(:current_user, user)
   end
 

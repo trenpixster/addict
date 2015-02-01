@@ -24,10 +24,17 @@ defmodule Addict.Plugs.Authenticated do
   def call(conn, _) do
     conn = fetch_session(conn)
 
-    if get_session(conn, :logged_in) do
+    if is_logged_in(get_session(conn, :current_user)) do
       assign(conn, :current_user, get_session(conn, :current_user))
     else
       conn |> redirect(to: not_logged_in_url) |> halt
+    end
+  end
+
+  def is_logged_in(user_session) do
+    case user_session do
+      nil -> false
+      _   -> true
     end
   end
 
