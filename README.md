@@ -1,6 +1,8 @@
 Addict
 ======
 
+[![Build Status](https://travis-ci.org/trenpixster/addict.svg)](https://travis-ci.org/trenpixster/addict)
+
 ## What is it?
 Addict allows you to manage users on your Phoenix app easily.
 
