@@ -47,9 +47,49 @@ defmodule Addict.ManagerInteractor do
     end
   end
 
+  @doc """
+  Triggers an error when `password` and `password_confirm` mismatch.
+  """
+  def reset_password(_, password, password_confirm, _) when password != password_confirm do
+    {:error, "passwords must match"}
+  end
+
+  @doc """
+  Triggers an error when `recovery_hash` is invalid.
+  """
+  def reset_password(recovery_hash, _, _, _)
+  when is_nil(recovery_hash)
+    or recovery_hash == "" do
+    {:error, "invalid recovery hash"}
+  end
+
+  @doc """
+  Resets the password for the user with the given `recovery_hash`.
+  """
+  def reset_password(recovery_hash, password, _, repo \\ Addict.Repository) do
+    {hash, salt, _} = generate_password(%{"password" => password})
+    repo.find_by_recovery_hash(recovery_hash)
+    |> reset_user_password(hash, salt, repo)
+  end
+
   #
   # Private functions
   #
+
+  defp reset_user_password(nil,_,_,_) do
+    {:error, "invalid recovery hash"}
+  end
+
+  defp reset_user_password({:error, message},_,_,_) do
+    {:error, message}
+  end
+
+  defp reset_user_password(user, hash, salt, repo) do
+    IO.inspect user
+    repo.change_password(user, hash, salt)
+  end
+
+
   defp prepare_password_recovery(email, repo) do
     {:ok, salt} = :bcrypt.gen_salt()
     salt = salt |> to_string
@@ -76,6 +116,7 @@ defmodule Addict.ManagerInteractor do
     |> Map.put("salt", salt)
     repo.create(user_params)
   end
+
   defp send_password_recovery_email({:ok, nil}, _) do
     {:error, "Unable to send recovery e-mail"}
   end

@@ -45,6 +45,24 @@ defmodule Addict.Repository do
       e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
     end
   end
+
+
+  @doc """
+  Changes the hashed password for the target user.
+
+  It either returns a tuple with `{:ok, user}` or, in case an error
+  happens, a tuple with `{:error, error_message}`
+  """
+  def change_password(user, hash, salt) do
+    try do
+      user = %{ user | recovery_hash: nil, hash: hash, salt: salt}
+
+      {:ok, @db.update(user)}
+      rescue
+        e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
+    end
+  end
+
   @doc """
   Retrieves a single user from the database based on the user's e-mail.
 
@@ -54,6 +72,21 @@ defmodule Addict.Repository do
   def find_by_email(email) do
     try do
       query = from u in @user, where: u.email == ^email
+      @db.one query
+    rescue
+      e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
+    end
+  end
+
+  @doc """
+  Retrieves a single user from the database based on the user's recovery hash.
+
+  It either returns the `user` or, in case an error occurs, a tuple with
+  `{:error, error_message}`. If no user exists, `nil` will be returned.
+  """
+  def find_by_recovery_hash(hash) do
+    try do
+      query = from u in @user, where: u.recovery_hash == ^hash
       @db.one query
     rescue
       e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)

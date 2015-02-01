@@ -61,6 +61,22 @@ defmodule Addict.Controller do
     AddictManager.recover_password(email)
     |> do_password_recover(conn)
   end
+
+
+  @doc """
+  Entry point for setting a user's password given the reset token.
+
+  Params needed to be populated with `token`, `password` and `password_confirm`
+  """
+  def reset_password(conn, params) do
+    token = params["token"]
+    password = params["password"]
+    password_confirm = params["password_confirm"]
+
+    AddictManager.reset_password(token, password, password_confirm)
+    |> do_password_reset(conn)
+  end
+
   #
   # Private functions
   #
@@ -98,6 +114,18 @@ defmodule Addict.Controller do
   end
 
   defp do_password_recover({:error, message}, conn) do
+    conn
+    |> put_status(400)
+    |> json %{message: message}
+  end
+
+  defp do_password_reset({:ok, _}, conn) do
+    conn
+    |>put_status(200)
+    |> json %{message: "password reset"}
+  end
+
+  defp do_password_reset({:error, message}, conn) do
     conn
     |> put_status(400)
     |> json %{message: message}
