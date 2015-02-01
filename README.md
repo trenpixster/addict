@@ -96,6 +96,7 @@ If the user is not logged in and requests for the above action, it will be redir
 ## TODO
 - [ ] Validate user model fields
 - [x] Implement "Forgot and reset password" flow
+- [ ] Add example app
 - [ ] Invite users ability
 - [ ] ... whatever else it will definitely come up
 
