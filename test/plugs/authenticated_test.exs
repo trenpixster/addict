@@ -28,7 +28,6 @@ defmodule AuthenticatedTest do
 
   test "assign current_user when logged in", context do
     conn = context.conn
-      |> put_session(:logged_in, true)
       |> put_session(:current_user, "bob")
 
     refute Map.has_key?(conn.assigns, :current_user)
@@ -39,7 +38,7 @@ defmodule AuthenticatedTest do
 
   test "redirect when not logged in", context do
     conn = context.conn
-      |> put_session(:logged_in, false)
+      |> delete_session(:current_user)
       |> Auth.call(@authenticated_opts)
 
     assert conn.halted
