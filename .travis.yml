@@ -7,9 +7,9 @@ before_install:
 before_script:
   - export PATH=`pwd`/elixir/bin:$PATH
   - mix local.hex --force
-  - mix deps.get
+  - MIX_ENV=test mix deps.get
 script:
-  - mix test
+  - MIX_ENV=test mix test
 notifications:
   recipients:
     - nizar.venturini@gmail.com
