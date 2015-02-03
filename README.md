@@ -1,13 +1,11 @@
-Addict
-======
-
+# Addict
 [![Build Status](https://travis-ci.org/trenpixster/addict.svg)](https://travis-ci.org/trenpixster/addict)
 
 ## What is it?
-Addict allows you to manage users on your Phoenix app easily.
+Addict allows you to manage users authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
 
 ## What does it?
-For now, it allows to register, login and logout your users.
+For now, it enables your users to register, login, logout and recover/reset their passwords.
 
 ## On what does it depend?
 Addict depends on:
@@ -93,7 +91,6 @@ end
 ```
 
 If the user is not logged in and requests for the above action, it will be redirected to `not_logged_in_url`.
-
 
 ## TODO
 - [ ] Validate user model fields
