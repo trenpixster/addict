@@ -1,7 +1,6 @@
-# Addict
 [![Build Status](https://travis-ci.org/trenpixster/addict.svg)](https://travis-ci.org/trenpixster/addict)
+# Addict
 
-## What is it?
 Addict allows you to manage users authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
 
 ## What does it?
