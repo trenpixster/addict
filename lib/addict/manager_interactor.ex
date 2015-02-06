@@ -41,7 +41,7 @@ defmodule Addict.ManagerInteractor do
   """
   def verify_password(email, password, repo \\ Addict.Repository) do
     user = repo.find_by_email email
-    if @derivation.checkpw(password, user.hash) do
+    if valid_credentials(user, password) do
       {:ok, user}
     else
       {:error, "incorrect user or password"}
@@ -149,9 +149,8 @@ defmodule Addict.ManagerInteractor do
   end
 
   defp valid_credentials(user, password) do
-    user.hash == generate_hash_from_salt(password, user.salt)
+    @derivation.checkpw(password, user.hash)
   end
-
 
   defp generate_password(user_params) do
     hash = @derivation.hashpwsalt user_params["password"]
