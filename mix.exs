@@ -19,7 +19,7 @@ defmodule Addict.Mixfile do
   end
 
   defp applications(_) do
-    [:logger, :bcrypt]
+    [:logger]
   end
 
   defp deps(:test) do
@@ -30,7 +30,7 @@ defmodule Addict.Mixfile do
     [{:cowboy, "~> 1.0"},
      {:phoenix, "~> 0.8.0"},
      {:ecto, "~> 0.6.0"},
-     {:bcrypt, github: "opscode/erlang-bcrypt"},
+     {:comeonin, "~> 0.2.2" },
      {:mailgun, "~> 0.0.2"}]
   end
 

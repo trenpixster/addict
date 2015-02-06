@@ -53,9 +53,9 @@ defmodule Addict.Repository do
   It either returns a tuple with `{:ok, user}` or, in case an error
   happens, a tuple with `{:error, error_message}`
   """
-  def change_password(user, hash, salt) do
+  def change_password(user, hash) do
     try do
-      user = %{ user | recovery_hash: nil, hash: hash, salt: salt}
+      user = %{ user | recovery_hash: nil, hash: hash}
 
       {:ok, @db.update(user)}
       rescue
