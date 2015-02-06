@@ -22,7 +22,7 @@ The user model must have at least the following schema:
   email varchar(200),
   username varchar(200),
   hash varchar(130),
-  recover_hash varchar(130),
+  recovery_hash varchar(130),
   CONSTRAINT u_constraint UNIQUE (email)
 ```
 
