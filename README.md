@@ -8,7 +8,7 @@ For now, it enables your users to register, login, logout and recover/reset thei
 
 ## On what does it depend?
 Addict depends on:
-- [Phoenix Framework](www.phoenixframework.org)
+- [Phoenix Framework](http://www.phoenixframework.org)
 - [Ecto](https://github.com/elixir-lang/ecto)
 - [Mailgun](https://mailgun.com) (Don't have an account? Register for free and get 10000 e-mails per month included)
 
