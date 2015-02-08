@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Addict by trenpixster</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Addict</h1>
+          <h2>User registration lib for Phoenix Framework</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/trenpixster/addict/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/trenpixster/addict/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/trenpixster/addict" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="addict-v004" class="anchor" href="#addict-v004" aria-hidden="true"><span class="octicon octicon-link"></span></a>Addict v0.0.4</h1>
+
+<p>Addict allows you to manage users authentication on your <a href="http://www.phoenixframework.org">Phoenix Framework</a> app easily.</p>
+
+<h2>
+<a id="what-does-it" class="anchor" href="#what-does-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does it?</h2>
+
+<p>For now, it enables your users to register, login, logout and recover/reset their passwords.</p>
+
+<h2>
+<a id="on-what-does-it-depend" class="anchor" href="#on-what-does-it-depend" aria-hidden="true"><span class="octicon octicon-link"></span></a>On what does it depend?</h2>
+
+<p>Addict depends on:</p>
+
+<ul>
+<li><a href="http://www.phoenixframework.org">Phoenix Framework</a></li>
+<li><a href="https://github.com/elixir-lang/ecto">Ecto</a></li>
+<li>
+<a href="https://mailgun.com">Mailgun</a> (Don't have an account? Register for free and get 10000 e-mails per month included)</li>
+</ul>
+
+<h2>
+<a id="how-can-i-get-it-started" class="anchor" href="#how-can-i-get-it-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>How can I get it started?</h2>
+
+<p>Addict is dependent on an ecto <a href="https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L18">User Model</a> and a <a href="https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L12">Database connection interface</a>.</p>
+
+<p>The user model must have at least the following schema:</p>
+
+<pre><code>  id serial primary key,
+  email varchar(200),
+  username varchar(200),
+  hash varchar(130),
+  recovery_hash varchar(130),
+  CONSTRAINT u_constraint UNIQUE (email)
+</code></pre>
+
+<p>There are some application configurations you must add to your <code>configs.ex</code>:</p>
+
+<div class="highlight highlight-elixir"><pre>config <span class="pl-c1">:addict</span>, <span class="pl-c1">not_logged_in_url:</span> <span class="pl-s1"><span class="pl-pds">"</span>/error<span class="pl-pds">"</span></span>,  <span class="pl-c"># the URL where users will be redirected to</span>
+                <span class="pl-c1">db:</span> <span class="pl-vo">MyApp</span>.<span class="pl-vo">MyRepo</span>,
+                <span class="pl-c1">user:</span> <span class="pl-vo">MyApp</span>.<span class="pl-vo">MyUser</span>,
+                <span class="pl-c1">register_from_email:</span> <span class="pl-s1"><span class="pl-pds">"</span>Registration &lt;welcome@yourawesomeapp.com&gt;<span class="pl-pds">"</span></span>, <span class="pl-c"># email registered users will receive from address</span>
+                <span class="pl-c1">register_subject:</span> <span class="pl-s1"><span class="pl-pds">"</span>Welcome to yourawesomeapp!<span class="pl-pds">"</span></span>, <span class="pl-c"># email registered users will receive subject</span>
+                <span class="pl-c1">password_recover_from_email:</span> <span class="pl-s1"><span class="pl-pds">"</span>Password Recovery &lt;no-reply@yourawesomeapp.com&gt;<span class="pl-pds">"</span></span>,
+                <span class="pl-c1">password_recover_subject:</span> <span class="pl-s1"><span class="pl-pds">"</span>You requested a password recovery link<span class="pl-pds">"</span></span>,
+                <span class="pl-c1">email_templates:</span> <span class="pl-vo">MyApp</span>.<span class="pl-vo">MyEmailTemplates</span>, <span class="pl-c"># email templates for sending e-mails, more on this further down</span>
+                <span class="pl-c1">mailgun_domain:</span> <span class="pl-s1"><span class="pl-pds">"</span>yourawesomeapp.com<span class="pl-pds">"</span></span>,
+                <span class="pl-c1">mailgun_key:</span> <span class="pl-s1"><span class="pl-pds">"</span>apikey-secr3tzapik3y<span class="pl-pds">"</span></span></pre></div>
+
+<p>The <code>email_templates</code> configuration should point to a module with the following structure:</p>
+
+<div class="highlight highlight-elixir"><pre><span class="pl-k">defmodule</span> <span class="pl-en">MyApp.MyEmailTemplates</span> <span class="pl-k">do</span>
+  <span class="pl-k">def</span> register_template(user) <span class="pl-k">do</span>
+    <span class="pl-s1"><span class="pl-pds">"""</span></span>
+<span class="pl-s1">      &lt;h1&gt;This is the HTML the user will receive upon registering&lt;/h1&gt;</span>
+<span class="pl-s1">      You can access the user attributes: <span class="pl-s2"><span class="pl-pse">#{</span>user.email<span class="pl-pse">}</span></span></span>
+<span class="pl-s1"><span class="pl-pds">    """</span></span>
+  <span class="pl-k">end</span>
+
+  <span class="pl-k">def</span> password_recovery_template(user) <span class="pl-k">do</span>
+    <span class="pl-s1"><span class="pl-pds">"""</span></span>
+<span class="pl-s1">      &lt;h1&gt;This is the HTML the user will receive upon requesting a new password&lt;/h1&gt;</span>
+<span class="pl-s1">      You should provide a link to your app where the token will be processed:</span>
+<span class="pl-s1">      &lt;a href="http://yourawesomeapp.com/recover_password?token=<span class="pl-s2"><span class="pl-pse">#{</span>user.recovery_hash<span class="pl-pse">}</span></span>"&gt;like this&lt;/a&gt;</span>
+<span class="pl-s1"><span class="pl-pds">    """</span></span>
+  <span class="pl-k">end</span>
+<span class="pl-k">end</span></pre></div>
+
+<h2>
+<a id="how-can-i-use-it" class="anchor" href="#how-can-i-use-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>How can I use it?</h2>
+
+<p>Just add the following to your <code>router.ex</code>:</p>
+
+<div class="highlight highlight-elixir"><pre>    post <span class="pl-s1"><span class="pl-pds">"</span>/register<span class="pl-pds">"</span></span>, <span class="pl-vo">Addict</span>.<span class="pl-vo">Controller</span>, <span class="pl-c1">:register</span> <span class="pl-c"># required params: email, password, username</span>
+    post <span class="pl-s1"><span class="pl-pds">"</span>/logout<span class="pl-pds">"</span></span>, <span class="pl-vo">Addict</span>.<span class="pl-vo">Controller</span>, <span class="pl-c1">:logout</span>
+    post <span class="pl-s1"><span class="pl-pds">"</span>/login<span class="pl-pds">"</span></span>, <span class="pl-vo">Addict</span>.<span class="pl-vo">Controller</span>, <span class="pl-c1">:login</span> <span class="pl-c"># required params: email, password</span>
+    post <span class="pl-s1"><span class="pl-pds">"</span>/recover_password<span class="pl-pds">"</span></span>, <span class="pl-vo">Addict</span>.<span class="pl-vo">Controller</span>, <span class="pl-c1">:recover_password</span> <span class="pl-c"># required params: email</span>
+    post <span class="pl-s1"><span class="pl-pds">"</span>/reset_password<span class="pl-pds">"</span></span>, <span class="pl-vo">Addict</span>.<span class="pl-vo">Controller</span>, <span class="pl-c1">:reset_password</span> <span class="pl-c"># required params: token, password, password_confirmation</span></pre></div>
+
+<p>And use <code>Addict.Plugs.Authenticated</code> plug to validate requests on your controllers:</p>
+
+<div class="highlight highlight-elixir"><pre><span class="pl-k">defmodule</span> <span class="pl-en">MyAwesomeApp.PageController</span> <span class="pl-k">do</span>
+  <span class="pl-k">use</span> <span class="pl-vo">Phoenix</span>.<span class="pl-vo">Controller</span>
+
+  plug <span class="pl-vo">Addict</span>.<span class="pl-vo">Plugs</span>.<span class="pl-vo">Authenticated</span> <span class="pl-k">when</span> action <span class="pl-k">in</span> [<span class="pl-c1">:foobar</span>]
+  plug <span class="pl-c1">:action</span>
+
+  <span class="pl-k">def</span> foobar(conn, _params) <span class="pl-k">do</span>
+    render conn, <span class="pl-s1"><span class="pl-pds">"</span>index.html<span class="pl-pds">"</span></span>
+  <span class="pl-k">end</span>
+
+<span class="pl-k">end</span></pre></div>
+
+<p>If the user is not logged in and requests for the above action, it will be redirected to <code>not_logged_in_url</code>.</p>
+        </section>
+
+        <footer>
+          Addict is maintained by <a href="https://github.com/trenpixster">trenpixster</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-59493371-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
