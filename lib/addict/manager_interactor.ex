@@ -86,7 +86,6 @@ defmodule Addict.ManagerInteractor do
   end
 
   defp reset_user_password(user, hash, repo) do
-    IO.inspect user
     repo.change_password(user, hash)
   end
 
