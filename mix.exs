@@ -29,7 +29,7 @@ defmodule Addict.Mixfile do
   defp deps(:prod) do
     [{:cowboy, "~> 1.0"},
      {:phoenix, "~> 0.8.0"},
-     {:ecto, "~> 0.6.0"},
+     {:ecto, ">= 0.6.0"},
      {:comeonin, "~> 0.2.2" },
      {:mailgun, "~> 0.0.2"}]
   end

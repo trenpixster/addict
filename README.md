@@ -90,6 +90,22 @@ end
 
 If the user is not logged in and requests for the above action, it will be redirected to `not_logged_in_url`.
 
+## Extending
+
+If you need to extend controller of manager behaviour you can do it. You just have to create new modules and `use` Base modules:
+
+```elixir
+    defmodule ExtendedManagerInteractor do
+      use Addict.BaseManagerInteractor
+
+      defp validate_params(user_params) do
+      ...
+      end
+
+    end
+```
+
+
 ## TODO
 - [ ] Validate user model fields
 - [x] Implement "Forgot and reset password" flow
