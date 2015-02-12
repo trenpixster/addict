@@ -1,7 +1,7 @@
 defmodule Addict.BaseManagerInteractor do
   @moduledoc """
     Addict BaseManagerInteractor is used as a base manager to be extended if needed.
-    It's responsability is to provide simple primtives for
+    It's responsability is to provide simple primitives for
     user operations.
     """
 
