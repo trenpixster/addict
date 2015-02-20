@@ -17,7 +17,7 @@ defmodule Addict.BaseController do
         Entry point for registering new users.
 
        `params` needs to include email, password and username.
-        Returns a JSON response in the format `{message: text}` with status `201` for
+        Returns a JSON response in the format `{message: text, user: %User{}}` with status `201` for
         successful creation, or `400` for when an error occurs.
         On success, it also logs the new user in.
       """
@@ -43,7 +43,7 @@ defmodule Addict.BaseController do
         Entry point for logging users in.
 
         Params needs to be populated with `email` and `password`. It returns `200`
-        status code along with the JSON response `{message: "logged in"}` or `400`
+        status code along with the JSON response `{message: "logged in", user: %User{}` or `400`
         with `{message: "invalid email or password"}`
 
        """
@@ -90,7 +90,7 @@ defmodule Addict.BaseController do
         fetch_session(conn)
         |> put_status(201)
         |> add_session(user)
-        |> json %{message: "user created"}
+        |> json %{message: "user created", user: user}
       end
 
       defp do_register({:error, message}, conn) do
@@ -103,7 +103,7 @@ defmodule Addict.BaseController do
         fetch_session(conn)
         |> put_status(200)
         |> add_session(user)
-        |> json %{message: "logged in"}
+        |> json %{message: "logged in", user: user}
       end
 
       defp do_login({:error, _}, conn) do
