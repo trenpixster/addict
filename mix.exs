@@ -7,7 +7,8 @@ defmodule Addict.Mixfile do
      elixir: "~> 1.0",
      description: description,
      package: package,
-     deps: deps(Mix.env)]
+     docs: &docs/0,
+     deps: deps]
   end
 
   def application do
@@ -22,20 +23,14 @@ defmodule Addict.Mixfile do
     [:logger]
   end
 
-  defp deps(:test) do
-    [{:mock, "~> 0.1.0"}] ++ deps(:prod)
-  end
-
-  defp deps(:prod) do
+  defp deps do
     [{:cowboy, "~> 1.0"},
      {:phoenix, ">= 0.8.0"},
      {:ecto, ">= 0.6.0"},
      {:comeonin, "~> 0.2.2" },
-     {:mailgun, "~> 0.0.2"}]
-  end
-
-  defp deps(_) do
-    deps(:prod)
+     {:mailgun, "~> 0.0.2"},
+     {:earmark, "~> 0.1", only: :docs},
+     {:ex_doc, "~> 0.7.1", only: :docs}]
   end
 
   defp package do
@@ -53,4 +48,10 @@ defmodule Addict.Mixfile do
     """
   end
 
+  defp docs do
+    {ref, 0} = System.cmd("git", ["rev-parse", "--verify", "--quiet", "HEAD"])
+    [source_ref: ref,
+     main: "README",
+     readme: "README.md"]
+    end
 end
