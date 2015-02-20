@@ -68,7 +68,7 @@ Just add the following to your `router.ex`:
     post "/logout", Addict.Controller, :logout
     post "/login", Addict.Controller, :login # required params: email, password
     post "/recover_password", Addict.Controller, :recover_password # required params: email
-    post "/reset_password", Addict.Controller, :reset_password # required params: token, password, password_confirmation
+    post "/reset_password", Addict.Controller, :reset_password # required params: token, password, password_confirm
 ```
 
 
