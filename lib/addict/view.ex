@@ -5,7 +5,7 @@ defmodule Addict.View do
     Addict helper view functions to be used on templates
    """
 
-  @moduledoc """
+  @doc """
    checks if user is logged in, returns true if so,
     and false if not
   """
@@ -13,7 +13,7 @@ defmodule Addict.View do
     !!get_session conn, :current_user
   end
 
-  @moduledoc """
+  @doc """
    gets user model properties
   """
   def get_user(conn, prop) do
