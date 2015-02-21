@@ -1,0 +1,6 @@
+/_build
+/deps
+/example_app/_build
+/example_app//deps
+erl_crash.dump
+*.ez
