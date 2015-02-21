@@ -26,7 +26,7 @@ defmodule Addict.Repository do
     end
   end
 
-  def add_recovery_hash(nil, hash) do
+  def add_recovery_hash(nil, _) do
     {:error, "invalid user"}
   end
 
