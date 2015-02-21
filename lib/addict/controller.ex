@@ -10,7 +10,7 @@ defmodule Addict.BaseController do
       use Phoenix.Controller
 
       @manager Application.get_env(:addict, :manager) || Addict.ManagerInteractor
-
+      alias Addict.SessionInteractor
       plug :action
 
       @doc """
@@ -22,8 +22,9 @@ defmodule Addict.BaseController do
         On success, it also logs the new user in.
       """
       def register(conn, user_params) do
-        @manager.create(user_params)
-        |> do_register(conn)
+        {conn, message} = @manager.create(user_params)
+        |> SessionInteractor.register(conn)
+        json conn, message
       end
 
       @doc """
@@ -33,10 +34,8 @@ defmodule Addict.BaseController do
         in the format `{message: "logged out"}` with a `200` status code.
        """
       def logout(conn, _) do
-        fetch_session(conn)
-        |> delete_session(:current_user)
-        |> put_status(200)
-        |> json %{message: "logged out"}
+        {conn, message} = SessionInteractor.logout(conn)
+        json conn, message
       end
 
       @doc """
@@ -51,8 +50,9 @@ defmodule Addict.BaseController do
         email = params["email"]
         password = params["password"]
 
-        @manager.verify_password(email, password)
-        |> do_login(conn)
+        {conn, message} = @manager.verify_password(email, password)
+        |> SessionInteractor.login(conn)
+        json conn, message
       end
 
       @doc """
@@ -63,10 +63,10 @@ defmodule Addict.BaseController do
       def recover_password(conn, params) do
         email = params["email"]
 
-        @manager.recover_password(email)
-        |> do_password_recover(conn)
+        {conn, message} = @manager.recover_password(email)
+        |> SessionInteractor.password_recover(conn)
+        json conn, message
       end
-
 
       @doc """
        Entry point for setting a user's password given the reset token.
@@ -78,68 +78,11 @@ defmodule Addict.BaseController do
         password = params["password"]
         password_confirm = params["password_confirm"]
 
-        @manager.reset_password(token, password, password_confirm)
-        |> do_password_reset(conn)
+        {conn, message} = @manager.reset_password(token, password, password_confirm)
+        |> SessionInteractor.password_reset(conn)
+        json conn, message
       end
 
-      #
-      # Private functions
-      #
-
-      defp do_register({:ok, user}, conn) do
-        fetch_session(conn)
-        |> put_status(201)
-        |> add_session(user)
-        |> json %{message: "user created", user: user}
-      end
-
-      defp do_register({:error, message}, conn) do
-        fetch_session(conn)
-        |> put_status(400)
-        |> json %{message: message}
-      end
-
-      defp do_login({:ok, user}, conn)  do
-        fetch_session(conn)
-        |> put_status(200)
-        |> add_session(user)
-        |> json %{message: "logged in", user: user}
-      end
-
-      defp do_login({:error, _}, conn) do
-        conn
-        |> put_status(400)
-        |> json %{message: "invalid email or password"}
-      end
-
-      defp do_password_recover({:ok, _}, conn) do
-        conn
-        |>put_status(200)
-        |> json %{message: "email sent"}
-      end
-
-      defp do_password_recover({:error, message}, conn) do
-        conn
-        |> put_status(400)
-        |> json %{message: message}
-      end
-
-      defp do_password_reset({:ok, _}, conn) do
-        conn
-        |>put_status(200)
-        |> json %{message: "password reset"}
-      end
-
-      defp do_password_reset({:error, message}, conn) do
-        conn
-        |> put_status(400)
-        |> json %{message: message}
-      end
-
-      defp add_session(conn, user) do
-        conn
-        |> put_session(:current_user, user)
-      end
     end
   end
 end
