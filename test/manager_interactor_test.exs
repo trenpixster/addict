@@ -4,7 +4,7 @@ defmodule Addict.ManagerInteractorTest do
 
   test "creates a user" do
     user_params = %{"email" => "test@example.com", "password" => "password", "username" => "test"}
-    assert Interactor.create(user_params, RepoStub, MailerStub) == {:ok, %{email: "test@example.com"}}
+    assert Interactor.create(user_params, RepoStub, MailerStub, PasswordInteractorStub) == {:ok, %{email: "test@example.com"}}
   end
 
   test "validates for invalid params" do
@@ -27,7 +27,7 @@ defmodule Addict.ManagerInteractorTest do
   end
 
   test "resets password" do
-    assert Interactor.reset_password("token123", "password", "password", RepoStub) == {:ok, %{email: "test@example.com"}}
+    assert Interactor.reset_password("token123", "valid_password", "valid_password", RepoStub, PasswordInteractorStub) == {:ok, %{email: "test@example.com"}}
   end
 
   test "handles reset password with nilled token" do
@@ -36,6 +36,16 @@ defmodule Addict.ManagerInteractorTest do
 
   test "handles reset password with invalid token" do
     assert Interactor.reset_password("invalidtoken", "password", "password", RepoStub) == {:error, "invalid recovery hash"}
+  end
+
+  test "handles reset password with invalid password confirmation" do
+    assert Interactor.reset_password("invalidtoken", "password", "password_invalid") == {:error, "passwords must match"}
+  end
+end
+
+defmodule PasswordInteractorStub do
+  def generate_hash(_) do
+    "1337h4$h"
   end
 end
 

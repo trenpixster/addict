@@ -8,8 +8,7 @@ defmodule Addict.BaseManagerInteractor do
   defmacro __using__(_) do
     quote do
       require Logger
-
-      @derivation Application.get_env(:addict, :derivation) || Comeonin.Pbkdf2
+      alias Addict.PasswordInteractor
 
       @doc """
         Throws exception when user params is invalid.
@@ -24,10 +23,11 @@ defmodule Addict.BaseManagerInteractor do
 
         Required fields in `user_params` `Dict` are: `email`, `password`, `username`.
       """
-      def create(user_params, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway) do
+      def create(user_params, repo \\ Addict.Repository, mailer \\ Addict.EmailGateway, password_interactor \\ Addict.PasswordInteractor) do
         validate_params(user_params)
-        |> generate_password
-        |> create_username(repo)
+        |> (fn (params) -> params["password"] end).()
+        |> password_interactor.generate_hash
+        |> create_username(user_params, repo)
         |> send_welcome_email(mailer)
       end
 
@@ -43,9 +43,9 @@ defmodule Addict.BaseManagerInteractor do
         Verifies if the provided `password` is the same as the `password` for the user
         associated with the given `email`.
       """
-      def verify_password(email, password, repo \\ Addict.Repository) do
+      def verify_password(email, password, repo \\ Addict.Repository, password_interactor \\ Addict.PasswordInteractor) do
         user = repo.find_by_email email
-        if valid_credentials(user, password) do
+        if !(is_nil user) && password_interactor.verify_credentials(user.hash, password) do
           {:ok, user}
         else
           {:error, "incorrect user or password"}
@@ -55,24 +55,24 @@ defmodule Addict.BaseManagerInteractor do
       @doc """
         Triggers an error when `password` and `password_confirm` mismatch.
       """
-      def reset_password(_, password, password_confirm, _) when password != password_confirm do
+      def reset_password(_, password, password_confirm) when password != password_confirm do
         {:error, "passwords must match"}
       end
 
       @doc """
         Triggers an error when `recovery_hash` is invalid.
       """
-      def reset_password(recovery_hash, _, _, _)
+      def reset_password(recovery_hash, _, _)
         when is_nil(recovery_hash)
         or recovery_hash == "" do
-          {:error, "invalid recovery hash"}
-        end
+        {:error, "invalid recovery hash"}
+      end
 
         @doc """
           Resets the password for the user with the given `recovery_hash`.
         """
-        def reset_password(recovery_hash, password, _, repo \\ Addict.Repository) do
-          {hash, _} = generate_password(%{"password" => password})
+        def reset_password(recovery_hash, password, password_confirm, repo \\ Addict.Repository, password_interactor \\ Addict.PasswordInteractor)  when password == password_confirm do
+          hash = password_interactor.generate_hash(password)
           repo.find_by_recovery_hash(recovery_hash)
           |> reset_user_password(hash, repo)
         end
@@ -95,7 +95,7 @@ defmodule Addict.BaseManagerInteractor do
 
 
         defp prepare_password_recovery(email, repo) do
-          hash = @derivation.hashpwsalt "1"
+          hash = PasswordInteractor.generate_random_hash
           repo.find_by_email(email)
           |> repo.add_recovery_hash(hash)
         end
@@ -113,7 +113,7 @@ defmodule Addict.BaseManagerInteractor do
                end
         end
 
-        defp create_username({hash, user_params}, repo) do
+        defp create_username(hash, user_params, repo) do
           user_params = Map.delete(user_params, "password")
           |> Map.put("hash", hash)
           repo.create(user_params)
@@ -125,6 +125,7 @@ defmodule Addict.BaseManagerInteractor do
 
         defp send_password_recovery_email({:ok, user}, mailer) do
           result = mailer.send_password_recovery_email(user)
+          IO.puts "sent recovery email"
           case result do
             {:ok, _} -> {:ok, user}
             {:error, message} -> {:error, message}
@@ -145,19 +146,6 @@ defmodule Addict.BaseManagerInteractor do
 
         defp send_welcome_email({:error, message}, _) do
           {:error, message}
-        end
-
-        defp valid_credentials(nil, _) do
-          false
-        end
-
-        defp valid_credentials(user, password) do
-          @derivation.checkpw(password, user.hash)
-        end
-
-        defp generate_password(user_params) do
-          hash = @derivation.hashpwsalt user_params["password"]
-          {hash, user_params}
         end
     end
   end
