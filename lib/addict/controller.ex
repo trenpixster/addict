@@ -83,6 +83,7 @@ defmodule Addict.BaseController do
         json conn, message
       end
 
+      defoverridable Module.definitions_in(__MODULE__)
     end
   end
 end

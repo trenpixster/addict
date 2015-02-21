@@ -147,6 +147,8 @@ defmodule Addict.BaseManagerInteractor do
       defp send_welcome_email({:error, message}, _) do
         {:error, message}
       end
+
+      defoverridable Module.definitions_in(__MODULE__)
     end
   end
 end
