@@ -18,8 +18,8 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-  config :example_app, ExampleApp.DB.Postgres,
-    url: "ecto://addict:@localhost/addict"
+  config :example_app, ExampleApp.Repo,
+    url: "ecto://localhost/addict"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
@@ -28,7 +28,7 @@ import_config "#{Mix.env}.exs"
 config :addict, user: ExampleApp.Models.User,
                 not_logged_in_url: "/forbidden",
                 email_templates: ExampleApp.Presenters.EmailPresenter,
-                db: ExampleApp.DB.Postgres,
+                db: ExampleApp.Repo,
                 register_from_email: "ExampleApp <welcome@exampleapp.com>",
                 register_subject: "Welcome to ExampleApp!",
                 password_recover_from_email: "ExampleApp <no-reply@exampleapp.com>",
