@@ -19,7 +19,7 @@ defmodule ExampleApp.Router do
     get "/forbidden", ExampleApp.PageController, :forbidden
 
     post "/register", Addict.Controller, :register
-    post "/logout", Addict.Controller, :logout
+    post "/logout", ExampleApp.UserController, :logout
     post "/login", Addict.Controller, :login
     post "/password_recover", Addict.Controller, :recover_password
     post "/password_reset", Addict.Controller, :reset_password
