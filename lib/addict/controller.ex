@@ -7,11 +7,9 @@ defmodule Addict.BaseController do
 
   defmacro __using__(_) do
     quote do
-      use Phoenix.Controller
 
       @manager Application.get_env(:addict, :manager) || Addict.ManagerInteractor
       alias Addict.SessionInteractor
-      plug :action
 
       @doc """
         Entry point for registering new users.
@@ -92,6 +90,8 @@ defmodule Addict.Controller do
   @moduledoc """
    Default controller used by Addict
    """
-
+  use Phoenix.Controller
+  plug :action
   use Addict.BaseController
+
 end
