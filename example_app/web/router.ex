@@ -1,5 +1,6 @@
 defmodule ExampleApp.Router do
   use Phoenix.Router
+  use Addict.RoutesHelper
 
   pipeline :browser do
     plug :accepts, ~w(html, json)
@@ -18,10 +19,11 @@ defmodule ExampleApp.Router do
     get "/show", ExampleApp.PageController, :show
     get "/forbidden", ExampleApp.PageController, :forbidden
 
-    post "/register", Addict.Controller, :register
-    post "/logout", ExampleApp.UserController, :logout
-    post "/login", Addict.Controller, :login
-    post "/password_recover", Addict.Controller, :recover_password
-    post "/password_reset", Addict.Controller, :reset_password
+    addict :routes,
+      register: "/register",
+      login: "/login",
+      logout: "/logout",
+      recover_password: "/password/recover",
+      reset_password: "/password/reset"
   end
 end
