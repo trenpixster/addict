@@ -109,7 +109,7 @@ If you need to extend controller of manager behaviour you can do it. You just ha
 ## TODO
 - [ ] Validate user model fields
 - [x] Implement "Forgot and reset password" flow
-- [ ] Add example app
+- [x] Add example app
 - [ ] Invite users ability
 - [ ] ... whatever else it will definitely come up
 
