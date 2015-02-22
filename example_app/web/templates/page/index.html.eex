@@ -45,7 +45,7 @@
   <div class="col-lg-6">
     <h4>Recover Password</h4>
     <div>
-      <input id="txt-login-email" type="text" placeholder="email">
+      <input id="txt-recover-password-email" type="text" placeholder="email">
     </div>
     <div>
       <a id="btn-recover-password" class="btn btn-primary" href="#">Recover Password</a>
@@ -55,7 +55,7 @@
   <div class="col-lg-6">
     <h4>Reset Password</h4>
     <div>
-      <input id="txt-reset-token" type="text" placeholder="insert the token received on the e-mail here">
+      <input id="txt-reset-password-token" type="text" placeholder="insert the token received on the e-mail here">
     </div>
     <div>
       <input id="txt-reset-password" type="text" placeholder="password">
@@ -64,7 +64,7 @@
       <input id="txt-reset-password-confirm" type="text" placeholder="confirm password">
     </div>
     <div>
-      <a id="btn-login" class="btn btn-primary" href="#">Reset</a>
+      <a id="btn-reset-password" class="btn btn-primary" href="#">Reset</a>
     </div>
   </div>
 
@@ -94,11 +94,67 @@
         username: username
       })
       .then(function(data) {
-        alert(data.responseJSON.message);
+        alert(data.message);
       })
       .fail(function(data) {
+        alert(data.message);
+      })
+    });
+    $('#btn-login').click(function() {
+      var email = $('#txt-login-email').val();
+      var password = $('#txt-login-password').val();
+
+      $.post('/login', {
+        email: email,
+        password: password
+      })
+      .then(function(data) {
+        alert(data.message);
+      })
+      .fail(function(data) {
+        alert(data.message);
+      })
+    });
+    $('#btn-recover-password').click(function() {
+      var email = $('#txt-recover-password-email').val();
+
+      $.post('/password_recover', {
+        email: email
+      })
+      .then(function(data) {
+        alert(data.message);
+      })
+      .fail(function(data) {
+        alert(data.message);
+      })
+    });
+    $('#btn-logout').click(function() {
+      $.post('/logout')
+      .then(function(data) {
+        alert(data.message);
+      })
+      .fail(function(data) {
+        alert(data.message);
+      })
+    });
+
+    $('#btn-reset-password').click(function() {
+      var token = $('#txt-reset-password-token').val();
+      var password = $('#txt-reset-password').val();
+      var password_confirm = $('#txt-reset-password-confirm').val();
+
+      $.post('/password_reset', {
+        token: token,
+        password: password,
+        password_confirm: password_confirm
+      })
+      .then(function(data) {
+        alert(data.message);
+      })
+      .fail(function(data,a,b,c,d) {
         alert(data.responseJSON.message);
       })
     });
+
   });
 </script>

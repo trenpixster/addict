@@ -15,6 +15,6 @@ defmodule ExampleApp.PageController do
   end
 
   def forbidden(conn,_) do
-    render conn, "error.html"
+    render conn, "not_logged_in.html"
   end
 end
