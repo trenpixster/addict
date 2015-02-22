@@ -4,10 +4,10 @@ This example app intends for you to better grok how to integrate Addict in your 
 
 ## Configuring
 
-1 - Create a postgres db with the name "addict" and add a "addict" user with administration permissions on that database.
-2 - Run the script migration via `mix ecto.migrate -r ExampleApp.DB.Postgres`
-3 - Set the two required mailgun environment vars: `MAILGUN_DOMAIN` and `MAILGUN_KEY`
-4 - Run the phoenix app via `mix phoenix.server`
+1 - Create a postgres db with the name "addict" and add a "addict" user with administration permissions on that database.  
+2 - Run the script migration via `mix ecto.migrate -r ExampleApp.DB.Postgres`  
+3 - Set the two required mailgun environment vars: `MAILGUN_DOMAIN` and `MAILGUN_KEY`  
+4 - Run the phoenix app via `mix phoenix.server`  
 
 ## UI
 
@@ -21,3 +21,4 @@ Here are some important details that you might want to check out:
 - [`email_presenter.ex`](https://github.com/trenpixster/addict/blob/master/example_app/lib/presenters/email_presenter.ex) - required e-mail templates
 - [`router.ex`](https://github.com/trenpixster/addict/blob/master/example_app/web/router.ex) - binding local endpoints to Addict Control(ler)
 - [`page_controller.ex`](https://github.com/trenpixster/addict/blob/master/example_app/web/controllers/page_controller.ex) - Filtering a method for logged in users via `Addict.Plugs.Authenticated`
+- [`user_controller.ex`](https://github.com/trenpixster/addict/blob/master/example_app/web/controllers/user_controller.ex) - Overriding an addict controller method
