@@ -4,7 +4,6 @@ defmodule Addict.Plugs.Authenticated do
   authenticated.
   """
   import Plug.Conn
-  use Phoenix.Controller
 
   def init(options) do
     options
@@ -27,7 +26,7 @@ defmodule Addict.Plugs.Authenticated do
     if is_logged_in(get_session(conn, :current_user)) do
       assign(conn, :current_user, get_session(conn, :current_user))
     else
-      conn |> redirect(to: not_logged_in_url) |> halt
+      conn |> Phoenix.Controller.redirect(to: not_logged_in_url) |> halt
     end
   end
 
