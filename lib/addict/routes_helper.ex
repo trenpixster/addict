@@ -6,12 +6,33 @@ defmodule Addict.RoutesHelper do
   end
 
   defmacro addict(:routes, options \\ %{}) do
-    quote do
-      post unquote(options[:register]) || "/register", Addict.Controller, :register, as: :register
-      post unquote(options[:login]) || "/login", Addict.Controller, :login, as: :login
-      post unquote(options[:logout]) || "/logout", Addict.Controller, :logout, as: :logout
-      post unquote(options[:recover_password]) || "/password_recover", Addict.Controller, :recover_password, as: :recover_password
-      post unquote(options[:reset_password]) || "/password_reset", Addict.Controller, :reset_password, as: :reset_password
+    routes = [:register, :login, :logout, :recover_password, :reset_password]
+
+    for route <- routes do
+      route_options = options_for_route(route, options[route])
+
+      quote do
+        post unquote(route_options[:path]),
+          unquote(route_options[:controller]),
+          unquote(route_options[:action]),
+          as: unquote(route_options[:as])
+      end
     end
+  end
+
+  defp options_for_route(route, options) when is_list(options) do
+    path       = route_path(route, options[:path])
+    controller = options[:controller] || Addict.Controller
+    action     = options[:action] || route
+    as         = options[:as] || route
+
+    %{path: path, controller: controller, action: action, as: as}
+  end
+  defp options_for_route(route, path) do
+    options_for_route(route, [path: route_path(route, path)])
+  end
+
+  defp route_path(route, path) do
+    path || "/#{to_string(route)}"
   end
 end

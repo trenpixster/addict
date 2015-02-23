@@ -20,9 +20,7 @@ defmodule ExampleApp.Router do
     get "/forbidden", ExampleApp.PageController, :forbidden
 
     addict :routes,
-      register: "/register",
-      login: "/login",
-      logout: "/logout",
+      logout: [path: "/logout", controller: ExampleApp.UserController],
       recover_password: "/password/recover",
       reset_password: "/password/reset"
   end
