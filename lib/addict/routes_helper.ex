@@ -24,7 +24,7 @@ defmodule Addict.RoutesHelper do
     path       = route_path(route, options[:path])
     controller = options[:controller] || Addict.Controller
     action     = options[:action] || route
-    as         = options[:as] || route
+    as         = route
 
     %{path: path, controller: controller, action: action, as: as}
   end
