@@ -63,15 +63,48 @@ end
 
 ## How can I use it?
 Just add the following to your `router.ex`:
+
 ```elixir
-    post "/register", Addict.Controller, :register # required params: email, password, username
-    post "/logout", Addict.Controller, :logout
-    post "/login", Addict.Controller, :login # required params: email, password
-    post "/recover_password", Addict.Controller, :recover_password # required params: email
-    post "/reset_password", Addict.Controller, :reset_password # required params: token, password, password_confirm
+defmodule ExampleApp.Router do
+  use Phoenix.Router
+  use Addict.RoutesHelper
+
+  ...
+
+  scope "/" do
+    addict :routes
+  end
+end
 ```
 
+This will generate the following routes:
 
+```
+        register_path  POST  /register          Addict.Controller.register/2
+           login_path  POST  /login             Addict.Controller.login/2
+          logout_path  POST  /logout            Addict.Controller.logout/2
+recover_password_path  POST  /recover_password  Addict.Controller.recover_password/2
+  reset_password_path  POST  /reset_password    Addict.Controller.reset_password/2
+```
+
+You can also override the `path` or `controller`/`action` for a given route:
+
+```elixir
+addict :routes,
+  logout: [path: "/sign-out", controller: ExampleApp.UserController, action: :sign_out],
+  recover_password: "/password/recover",
+  reset_password: "/password/reset"
+```
+
+These overrides will generate the following routes:
+
+```
+        register_path  POST  /register          Addict.Controller.register/2
+           login_path  POST  /login             Addict.Controller.login/2
+          logout_path  POST  /sign-out          ExampleApp.UserController.sign_out/2
+recover_password_path  POST  /password/recover  Addict.Controller.recover_password/2
+  reset_password_path  POST  /password/reset    Addict.Controller.reset_password/2
+```
 
 And use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
 ```elixir

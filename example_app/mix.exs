@@ -26,6 +26,6 @@ defmodule ExampleApp.Mixfile do
      {:cowboy, "~> 1.0"},
      {:postgrex, ">= 0.7.0"},
      {:ecto, ">= 0.8.0"},
-     {:addict, github: "trenpixster/addict"}]
+     {:addict, path: "../"}]
   end
 end

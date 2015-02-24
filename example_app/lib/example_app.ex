@@ -9,7 +9,7 @@ defmodule ExampleApp do
     children = [
       # Start the endpoint when the application starts
       supervisor(ExampleApp.Endpoint, []),
-      worker(ExampleApp.DB.Postgres, [])
+      worker(ExampleApp.Repo, [])
       # Here you could define other workers and supervisors as children
       # worker(ExampleApp.Worker, [arg1, arg2, arg3]),
     ]

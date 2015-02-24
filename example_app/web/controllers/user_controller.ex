@@ -3,7 +3,7 @@ defmodule ExampleApp.UserController do
   plug :action
   use Addict.BaseController
 
-  def logout(conn,_) do
+  def signout(conn,_) do
     {conn, message} = Addict.SessionInteractor.logout(conn)
     json conn, %{message: "Logged out! And this is a custom message"}
   end

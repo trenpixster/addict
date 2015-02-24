@@ -118,7 +118,7 @@
     $('#btn-recover-password').click(function() {
       var email = $('#txt-recover-password-email').val();
 
-      $.post('/password_recover', {
+      $.post('/password/recover', {
         email: email
       })
       .then(function(data) {
@@ -143,7 +143,7 @@
       var password = $('#txt-reset-password').val();
       var password_confirm = $('#txt-reset-password-confirm').val();
 
-      $.post('/password_reset', {
+      $.post('/password/reset', {
         token: token,
         password: password,
         password_confirm: password_confirm
