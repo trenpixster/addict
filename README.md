@@ -140,11 +140,7 @@ If you need to extend controller of manager behaviour you can do it. You just ha
 
 
 ## TODO
-- [ ] Validate user model fields
-- [x] Implement "Forgot and reset password" flow
-- [x] Add example app
-- [ ] Invite users ability
-- [ ] ... whatever else it will definitely come up
+Check the [issues](https://github.com/trenpixster/addict/issues) on this repository to check or track the ongoing improvements and new features.
 
 ## Contributing
 
