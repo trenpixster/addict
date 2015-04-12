@@ -27,7 +27,7 @@ defmodule Addict.Mixfile do
     [{:cowboy, "~> 1.0"},
      {:phoenix, ">= 0.8.0"},
      {:ecto, ">= 0.6.0"},
-     {:comeonin, "~> 0.2.2" },
+     {:comeonin, "~> 0.4" },
      {:mailgun, "~> 0.0.2"},
      {:earmark, "~> 0.1", only: :docs},
      {:ex_doc, "~> 0.7.1", only: :docs}]
