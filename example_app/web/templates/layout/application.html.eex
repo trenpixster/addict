@@ -15,7 +15,7 @@
     <div class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
-          <li><a href="httpss://github.com/trenpixster/addict">Get Addict'd</a></li>
+          <li><a href="https://github.com/trenpixster/addict">Get Addict'd</a></li>
           <li><a href="https://www.phoenixframework.org/docs">Get Started</a></li>
         </ul>
         <span class="logo"></span>
