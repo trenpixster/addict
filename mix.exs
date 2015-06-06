@@ -44,7 +44,8 @@ defmodule Addict.Mixfile do
 
   defp description do
     """
-    Addict allows you to manage users on your Phoenix app easily. Register, login and logout is available off-the-shelf.
+    Addict allows you to manage users on your Phoenix app easily. Register, login,
+    logout, recover password and password updating is available off-the-shelf.
     """
   end
 
