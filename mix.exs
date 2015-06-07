@@ -20,7 +20,7 @@ defmodule Addict.Mixfile do
   end
 
   defp applications(_) do
-    [:logger]
+    [:phoenix, :ecto, :comeonin, :mailgun, :logger]
   end
 
   defp deps do
