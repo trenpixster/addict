@@ -40,7 +40,12 @@ config :addict, not_logged_in_url: "/error",  # the URL where users will be redi
                 password_recover_from_email: "Password Recovery <no-reply@yourawesomeapp.com>",
                 password_recover_subject: "You requested a password recovery link",
                 email_templates: MyApp.MyEmailTemplates, # email templates for sending e-mails, more on this further down
-                mailgun_domain: "yourawesomeapp.com",
+
+```
+
+Environment specific configuration options go into their respective `config/*.exs`.
+```elixir
+config :addict, mailgun_domain: "yourawesomeapp.com",
                 mailgun_key: "apikey-secr3tzapik3y"
 ```
 
