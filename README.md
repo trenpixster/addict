@@ -29,7 +29,7 @@ The user model must have at least the following schema:
   CONSTRAINT u_constraint UNIQUE (email)
 ```
 
-There are some application configurations you must add to your `configs.ex`:
+There are some application configurations you must add to your `configs.exs`:
 
 ```elixir
 config :addict, not_logged_in_url: "/error",  # the URL where users will be redirected to
