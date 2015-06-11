@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/trenpixster/addict.svg)](https://travis-ci.org/trenpixster/addict) [![Hex.pm](http://img.shields.io/hexpm/v/addict.svg)](https://hex.pm/packages/addict) [![Hex.pm](http://img.shields.io/hexpm/dt/addict.svg)](https://hex.pm/packages/addict)
   [![Github Issues](http://githubbadges.herokuapp.com/trenpixster/addict/issues.svg)](https://github.com/trenpixster/addict/issues)
   [![Pending Pull-Requests](http://githubbadges.herokuapp.com/trenpixster/addict/pulls.svg)](https://github.com/trenpixster/addict/pulls)
-  
+
 # Addict
 
 Addict allows you to manage users authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
