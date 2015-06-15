@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/trenpixster/addict.svg)](https://travis-ci.org/trenpixster/addict) [![Hex.pm](http://img.shields.io/hexpm/v/addict.svg)](https://hex.pm/packages/addict) [![Hex.pm](http://img.shields.io/hexpm/dt/addict.svg)](https://hex.pm/packages/addict)
   [![Github Issues](http://githubbadges.herokuapp.com/trenpixster/addict/issues.svg)](https://github.com/trenpixster/addict/issues)
   [![Pending Pull-Requests](http://githubbadges.herokuapp.com/trenpixster/addict/pulls.svg)](https://github.com/trenpixster/addict/pulls)
-  
+
 # Addict
 
 Addict allows you to manage users authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
@@ -29,7 +29,7 @@ The user model must have at least the following schema:
   CONSTRAINT u_constraint UNIQUE (email)
 ```
 
-There are some application configurations you must add to your `configs.ex`:
+There are some application configurations you must add to your `configs.exs`:
 
 ```elixir
 config :addict, not_logged_in_url: "/error",  # the URL where users will be redirected to
@@ -40,7 +40,12 @@ config :addict, not_logged_in_url: "/error",  # the URL where users will be redi
                 password_recover_from_email: "Password Recovery <no-reply@yourawesomeapp.com>",
                 password_recover_subject: "You requested a password recovery link",
                 email_templates: MyApp.MyEmailTemplates, # email templates for sending e-mails, more on this further down
-                mailgun_domain: "yourawesomeapp.com",
+
+```
+
+Environment specific configuration options go into their respective `config/*.exs`.
+```elixir
+config :addict, mailgun_domain: "yourawesomeapp.com",
                 mailgun_key: "apikey-secr3tzapik3y"
 ```
 
@@ -65,7 +70,9 @@ end
 ```
 
 ## How can I use it?
-Just add the following to your `router.ex`:
+
+### Routes
+Add the following to your `router.ex`:
 
 ```elixir
 defmodule ExampleApp.Router do
@@ -109,7 +116,64 @@ recover_password_path  POST  /password/recover  Addict.Controller.recover_passwo
   reset_password_path  POST  /password/reset    Addict.Controller.reset_password/2
 ```
 
-And use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
+### Login/Register
+**Please note:** The routes are all POST routes, meaning you need to create your own form (or similar) for registering and login in.
+
+`AddictController.login/2` and `AddictController.register/2` both render a JSON upon success.
+In the following example Rails's `jquery-ujs` was used to add functionality for sending forms asynchronously.
+
+To install `jquery-ujs` add it to the dependencies in your `bower.json`. If that file does not exist, create it:
+
+```JSON
+{
+  "name": "myawesomeapp",
+  "dependencies": {
+    "jquery-ujs": "~1.0.3",
+  }
+}
+```
+
+#### Example Forms
+**Please note:** Currently the addict controller expects the params non-nested (i.e. `params[user_param]`, not `params[user][user_param]`).
+
+```HTML
+<h1>Login</h1>
+
+<%= form_tag login_path(@conn, :login), method: :post, "data-remote": true,
+      id: "login", do: fn -> %>
+  <div class="form-group">
+    <label>E-Mail</label>
+    <input type="email" name="email" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" name="password" class="form-control"/>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Login", class: "btn btn-primary" %>
+  </div>
+<% end %>
+```
+
+##### Handling the response with Javascript
+Since we added the 'data-remote' attribute from `jquery-ujs` to the form we don't see anything
+when we submit the form. It is sent asyncrhonously and we need to handle the response with Javascript,
+for example with the following snippet in your `web/static/app.js`.
+
+```Javascript
+$("form#login").on("ajax:success", function(){
+  window.location = "/" // redirect wherever you want to after login
+}).on("ajax:error", function(){
+  $(".alert-danger").html("Unable to login.");
+});
+```
+
+If this does not work, make sure you have `<script src="<%= static_path(@conn, "/js/app.js") %>"></script>` at the end of your HTML body in your layout (e.g. `web/templates/layouts/application.html.eex`) or surround the code with jQuery's document ready handler.
+
+## Checking for authentication
+Use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
 ```elixir
 defmodule MyAwesomeApp.PageController do
   use Phoenix.Controller
@@ -124,7 +188,7 @@ defmodule MyAwesomeApp.PageController do
 end
 ```
 
-If the user is not logged in and requests for the above action, it will be redirected to `not_logged_in_url`.
+If the user is not logged in and requests for the above action, he will be redirected to `not_logged_in_url`.
 
 ## Extending
 
