@@ -13,7 +13,8 @@ For now, it enables your users to register, login, logout and recover/reset thei
 Addict depends on:
 - [Phoenix Framework](http://www.phoenixframework.org)
 - [Ecto](https://github.com/elixir-lang/ecto)
-- [Mailgun](https://mailgun.com) (Don't have an account? Register for free and get 10000 e-mails per month included)
+
+Optionally you can make Addict send e-mails for you too. At the moment only [Mailgun](https://mailgun.com) is supported.
 
 ## How can I get it started?
 

@@ -125,7 +125,6 @@ defmodule Addict.BaseManagerInteractor do
 
       defp send_password_recovery_email({:ok, user}, mailer) do
         result = mailer.send_password_recovery_email(user)
-        IO.puts "sent recovery email"
         case result do
           {:ok, _} -> {:ok, user}
           {:error, message} -> {:error, message}
