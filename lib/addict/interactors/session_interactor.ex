@@ -6,7 +6,7 @@ defmodule Addict.SessionInteractor do
     |> put_status(201)
     |> create_session(user)
 
-    {conn, %{message: "user created", user: user}}
+    {conn, %{message: "user created", user: sanitize_user(user)}}
   end
 
   def register({:error, message}, conn) do
@@ -19,7 +19,7 @@ defmodule Addict.SessionInteractor do
     conn = fetch_session(conn)
     |> put_status(200)
     |> create_session(user)
-    {conn, %{message: "logged in", user: user}}
+    {conn, %{message: "logged in", user: sanitize_user(user)}}
   end
 
   def login({:error, _}, conn) do
@@ -67,6 +67,12 @@ defmodule Addict.SessionInteractor do
   defp create_session(conn, user) do
     conn
     |> put_session(:current_user, user)
+  end
+
+  defp sanitize_user(user) do
+    user
+    |> Map.delete :hash
+    |> Map.delete :recovery_hash
   end
 
 end
