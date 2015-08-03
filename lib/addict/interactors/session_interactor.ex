@@ -71,8 +71,7 @@ defmodule Addict.SessionInteractor do
 
   defp sanitize_user(user) do
     user
-    |> Map.delete :hash
-    |> Map.delete :recovery_hash
+    |> Map.drop [:hash, :recovery_hash, :__meta__, :__struct__]
   end
 
 end
