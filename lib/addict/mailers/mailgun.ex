@@ -13,6 +13,7 @@ defmodule Addict.Mailers.Mailgun do
   def send_email_to_user(email, from, subject, html_body) do
     if Application.get_env(:addict, :mailgun_domain) == nil do
       Logger.debug "E-mail to #{email} not sent. Please configure mailgun_key and mailgun_domain ENV variables"
+      {:ok, nil}
     else
       send_email(email, from, subject, html_body)
     end
