@@ -43,6 +43,6 @@ defmodule AuthenticatedTest do
 
     assert conn.halted
     assert conn.status in 300..399
-    assert get_resp_header(conn, "Location") == [Auth.not_logged_in_url]
+    assert get_resp_header(conn, "location") == [Auth.not_logged_in_url]
   end
 end
