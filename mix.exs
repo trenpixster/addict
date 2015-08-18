@@ -25,8 +25,8 @@ defmodule Addict.Mixfile do
 
   defp deps do
     [{:cowboy, "~> 1.0"},
-     {:phoenix, ">= 0.8.0"},
-     {:ecto, ">= 0.6.0"},
+     {:phoenix, ">= 0.15.0"},
+     {:ecto, "~> 0.9"},
      {:comeonin, "~> 0.4" },
      {:mailgun, "~> 0.0.2"},
      {:earmark, "~> 0.1", only: :dev},
