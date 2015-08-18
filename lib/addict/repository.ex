@@ -40,7 +40,7 @@ defmodule Addict.Repository do
     try do
       user = %{user | recovery_hash: hash}
 
-      {:ok, @db.update(user)}
+      @db.update(user)
     rescue
       e in Postgrex.Error -> PostgresErrorHandler.handle_error(__MODULE__, e)
     end
