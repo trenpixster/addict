@@ -8,24 +8,22 @@ use Mix.Config
 # Configures the endpoint
 config :example_app, ExampleApp.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "FvzfCCxDBNcqvE8KTOkxgyI0swSTqR8gr/JzVG0pir1fjMLdCqUUyr9F2HP2uMlb",
-  debug_errors: false,
-  pubsub: [adapter: Phoenix.PubSub.PG2]
-
+  root: Path.dirname(__DIR__),
+  secret_key_base: "OKeKRkVu+SE7lfB6PaS0jk48GgrNEy5S/f8ezx35Uz1jjumn5s0HoCqYZfyc/xFy",
+  render_errors: [default_format: "html"],
+  pubsub: [name: ExampleApp.PubSub,
+           adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-  config :example_app, ExampleApp.Repo,
-    url: "ecto://localhost/addict"
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
 
-config :addict, user: ExampleApp.Models.User,
+config :addict, user: ExampleApp.User,
                 not_logged_in_url: "/forbidden",
                 email_templates: ExampleApp.Presenters.EmailPresenter,
                 db: ExampleApp.Repo,

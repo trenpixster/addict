@@ -1,13 +1,17 @@
 # ExampleApp
 
+# ExampleApp
+
 This example app intends for you to better grok how to integrate Addict in your Phoenix App.
 
 ## Configuring
+  1. Install dependencies with `mix deps.get`
+  2. Create and migrate your database with `mix ecto.create && mix ecto.migrate`
+  3. Start Phoenix endpoint with `mix phoenix.server`
+  4. Optionally set the two required mailgun environment vars: `MAILGUN_DOMAIN` and `MAILGUN_KEY`
+  5. Run the phoenix app via `mix phoenix.server`
 
-1 - Create a postgres db with the name "addict" and add a "addict" user with administration permissions on that database.  
-2 - Run the script migration via `mix ecto.migrate -r ExampleApp.DB.Postgres`  
-3 - Set the two required mailgun environment vars: `MAILGUN_DOMAIN` and `MAILGUN_KEY`  
-4 - Run the phoenix app via `mix phoenix.server`  
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## UI
 

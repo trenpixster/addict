@@ -1,8 +1,6 @@
 defmodule ExampleApp.PageController do
-  use Phoenix.Controller
+  use ExampleApp.Web, :controller
   plug Addict.Plugs.Authenticated when action in [:show]
-
-  plug :action
 
   def index(conn, _params) do
     render conn, "index.html"

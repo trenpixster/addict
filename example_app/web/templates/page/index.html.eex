@@ -151,7 +151,7 @@
       .then(function(data) {
         alert(data.message);
       })
-      .fail(function(data,a,b,c,d) {
+      .fail(function(data) {
         alert(data.responseJSON.message);
       })
     });

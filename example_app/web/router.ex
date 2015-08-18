@@ -1,15 +1,16 @@
 defmodule ExampleApp.Router do
-  use Phoenix.Router
   use Addict.RoutesHelper
+  use ExampleApp.Web, :router
 
   pipeline :browser do
-    plug :accepts, ~w(html, json)
+    plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug :put_secure_browser_headers
   end
 
   pipeline :api do
-    plug :accepts, ~w(json)
+    plug :accepts, ["json"]
   end
 
   scope "/" do

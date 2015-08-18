@@ -1,6 +1,5 @@
 defmodule ExampleApp.UserController do
-  use Phoenix.Controller
-  plug :action
+  use ExampleApp.Web, :controller
   use Addict.BaseController
 
   def signout(conn,_) do
