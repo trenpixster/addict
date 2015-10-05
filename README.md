@@ -128,7 +128,7 @@ To install `jquery-ujs` add it to the dependencies in your `bower.json`. If that
 {
   "name": "myawesomeapp",
   "dependencies": {
-    "jquery-ujs": "~1.0.3",
+    "jquery-ujs": "~1.0.3"
   }
 }
 ```
