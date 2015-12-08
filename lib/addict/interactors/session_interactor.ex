@@ -5,6 +5,7 @@ defmodule Addict.SessionInteractor do
     conn = fetch_session(conn)
     |> put_status(201)
     |> create_session(user)
+    |> halt
 
     {conn, %{message: "user created", user: sanitize_user(user)}}
   end
@@ -19,6 +20,7 @@ defmodule Addict.SessionInteractor do
     conn = fetch_session(conn)
     |> put_status(200)
     |> create_session(user)
+    |> halt
     {conn, %{message: "logged in", user: sanitize_user(user)}}
   end
 
@@ -39,6 +41,7 @@ defmodule Addict.SessionInteractor do
   def password_recover({:ok, _}, conn) do
     conn = conn
     |> put_status(200)
+    |> halt
     {conn, %{message: "email sent"}}
   end
 
@@ -51,6 +54,7 @@ defmodule Addict.SessionInteractor do
   def password_reset({:ok, _}, conn) do
     conn = conn
     |> put_status(200)
+    |> halt
     {conn, %{message: "password reset"}}
   end
 
