@@ -1,0 +1,37 @@
+User Session info: <%= user_info(@conn) %>
+  <div>
+  <%= if is_logged_in(@conn) do %>
+    <a href="#" id="btn-logout">Logout</a>
+  <% else %>
+    <a href="/login">Login</a>
+  <% end %>
+  </br>
+  <a href="/send_reset_password_link">Forgot password?</a>
+</div>
+<h2>Listing users</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Encrypted password</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for user <- @users do %>
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.email %></td>
+      <td><%= user.encrypted_password %></td>
+
+      <td class="text-right">
+        <%= link "Delete", to: user_management_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "Register user", to: "/register" %>

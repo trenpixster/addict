@@ -9,8 +9,8 @@ use Mix.Config
 config :example_app, ExampleApp.Endpoint,
   url: [host: "localhost"],
   root: Path.dirname(__DIR__),
-  secret_key_base: "OKeKRkVu+SE7lfB6PaS0jk48GgrNEy5S/f8ezx35Uz1jjumn5s0HoCqYZfyc/xFy",
-  render_errors: [default_format: "html"],
+  secret_key_base: "yfHQS4p4x6/k7h8XJ4jNC5usq8xSkeJsgiRhv/PNVFW3M/ch2XDuN8U4y1eyGW0O",
+  render_errors: [accepts: ~w(html json)],
   pubsub: [name: ExampleApp.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
@@ -23,13 +23,42 @@ config :logger, :console,
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
 
-config :addict, user: ExampleApp.User,
-                not_logged_in_url: "/forbidden",
-                email_templates: ExampleApp.Presenters.EmailPresenter,
-                db: ExampleApp.Repo,
-                register_from_email: "ExampleApp <welcome@exampleapp.com>",
-                register_subject: "Welcome to ExampleApp!",
-                password_recover_from_email: "ExampleApp <no-reply@exampleapp.com>",
-                password_recover_subject: "ExampleApp password recovery",
-                mailgun_domain: System.get_env("MAILGUN_DOMAIN"),
-                mailgun_key: System.get_env("MAILGUN_KEY")
+# Configure phoenix generators
+config :phoenix, :generators,
+  migration: true,
+  binary_id: false
+
+config :addict,
+  secret_key: "2432622431322479506177654c79303442354a5a4b784f592e444f332e",
+  extra_validation: fn ({valid, errors}, user_params) -> {valid, errors} end, # define extra validation here
+  user_schema: ExampleApp.User,
+  repo: ExampleApp.Repo,
+  from_email: "no-reply@example.com", # CHANGE THIS
+  mailgun_domain: "CHANGE THIS",
+  mailgun_key: "CHANGE THIS",
+  mail_service: [:mailgun],
+  post_register: fn(conn, status, model) ->
+                  IO.inspect status
+                  IO.inspect model
+                  conn
+                end,
+  post_login: fn(conn, status, model) ->
+                  IO.inspect status
+                  IO.inspect model
+                  conn
+                end,
+  post_logout: fn(conn, status, model) ->
+                  IO.inspect status
+                  IO.inspect model
+                  conn
+                end,
+  post_reset_password: fn(conn, status, model) ->
+                  IO.inspect status
+                  IO.inspect model
+                  conn
+                end,
+  post_recover_password: fn(conn, status, model) ->
+                  IO.inspect status
+                  IO.inspect model
+                  conn
+                end

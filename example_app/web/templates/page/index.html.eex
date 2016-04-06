@@ -1,160 +1,39 @@
-<script type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <div class="jumbotron">
-  <h2>Welcome to Phoenix + Addict!</h2>
-  <p class="lead">Phoenix is an Elixir Web Framework targeting full-featured, fault tolerant applications with realtime functionality.</p>
-  <p class="lead">Addict is a library for phoenix that implements User Management in it. Explore the options below :)</p>
+  <h2><%= gettext "Welcome to %{name}", name: "Addict(ed) Phoenix!" %></h2>
+  <p class="lead"><i>don't worry about user management</i></p>
 </div>
 
 <div class="row marketing">
   <div class="col-lg-6">
-    <h4>Register</h4>
-    <div>
-      <input id="txt-register-username" type="text" placeholder="username">
-    </div>
-    <div>
-      <input id="txt-register-email" type="text" placeholder="email">
-    </div>
-    <div>
-      <input id="txt-register-password" type="text" placeholder="password">
-    </div>
-    <div>
-      <a id="btn-register" class="btn btn-primary" href="#">Register User</a>
-    </div>
+    <h4>User management</h4>
+    <ul>
+      <li>
+        <a href="/register">Register</a>
+      </li>
+      <li>
+        <a href="/login">Login</a>
+      </li>
+      <li>
+        <a href="#" onclick="javascript:$.post('/logout')">Logout</a>
+      </li>
+      <li>
+        <a href="/recover_password">Recover Password</a>
+      </li>
+      <li>
+        <a href="/reset_password">Reset Password</a>
+      </li>
+      <li>
+        <a href="/required_login">Page available for logged in users only</a>
+      </li>
+    </ul>
   </div>
 
   <div class="col-lg-6">
-    <h4>Login</h4>
-    <div>
-      <input id="txt-login-email" type="text" placeholder="email">
-    </div>
-    <div>
-      <input id="txt-login-password" type="text" placeholder="password">
-    </div>
-    <div>
-      <a id="btn-login" class="btn btn-primary" href="#">Login User</a>
-    </div>
+    <h4>Help</h4>
+    <ul>
+      <li>
+        <a href="https://github.com/trenpixster/addict/issues">Github Issues</a>
+      </li>
+    </ul>
   </div>
-
-  <div class="col-lg-6">
-    <h4>Logout</h4>
-    <div>
-      <a id="btn-logout" class="btn btn-primary" href="#">Logout User</a>
-    </div>
-  </div>
-
-  <div class="col-lg-6">
-    <h4>Recover Password</h4>
-    <div>
-      <input id="txt-recover-password-email" type="text" placeholder="email">
-    </div>
-    <div>
-      <a id="btn-recover-password" class="btn btn-primary" href="#">Recover Password</a>
-    </div>
-  </div>
-
-  <div class="col-lg-6">
-    <h4>Reset Password</h4>
-    <div>
-      <input id="txt-reset-password-token" type="text" placeholder="insert the token received on the e-mail here">
-    </div>
-    <div>
-      <input id="txt-reset-password" type="text" placeholder="password">
-    </div>
-    <div>
-      <input id="txt-reset-password-confirm" type="text" placeholder="confirm password">
-    </div>
-    <div>
-      <a id="btn-reset-password" class="btn btn-primary" href="#">Reset</a>
-    </div>
-  </div>
-
-  <div class="col-lg-6">
-    <h4>Test protected page</h4>
-    <div>
-      This page should only be available to logged in users
-    </div>
-    <div>
-      <a class="btn btn-primary" href="/show">Go</a>
-    </div>
-  </div>
-
-
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function () {
-    $('#btn-register').click(function() {
-      var email = $('#txt-register-email').val();
-      var username = $('#txt-register-username').val();
-      var password = $('#txt-register-password').val();
-
-      $.post('/register', {
-        email: email,
-        password: password,
-        username: username
-      })
-      .then(function(data) {
-        alert(data.message);
-      })
-      .fail(function(data) {
-        alert(data.message);
-      })
-    });
-    $('#btn-login').click(function() {
-      var email = $('#txt-login-email').val();
-      var password = $('#txt-login-password').val();
-
-      $.post('/login', {
-        email: email,
-        password: password
-      })
-      .then(function(data) {
-        alert(data.message);
-      })
-      .fail(function(data) {
-        alert(data.message);
-      })
-    });
-    $('#btn-recover-password').click(function() {
-      var email = $('#txt-recover-password-email').val();
-
-      $.post('/password/recover', {
-        email: email
-      })
-      .then(function(data) {
-        alert(data.message);
-      })
-      .fail(function(data) {
-        alert(data.message);
-      })
-    });
-    $('#btn-logout').click(function() {
-      $.post('/logout')
-      .then(function(data) {
-        alert(data.message);
-      })
-      .fail(function(data) {
-        alert(data.message);
-      })
-    });
-
-    $('#btn-reset-password').click(function() {
-      var token = $('#txt-reset-password-token').val();
-      var password = $('#txt-reset-password').val();
-      var password_confirm = $('#txt-reset-password-confirm').val();
-
-      $.post('/password/reset', {
-        token: token,
-        password: password,
-        password_confirm: password_confirm
-      })
-      .then(function(data) {
-        alert(data.message);
-      })
-      .fail(function(data) {
-        alert(data.responseJSON.message);
-      })
-    });
-
-  });
-</script>
