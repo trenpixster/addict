@@ -16,13 +16,18 @@ defmodule Addict.RoutesHelper do
           unquote(route_options[:controller]),
           unquote(route_options[:action]),
           as: unquote(route_options[:as])
+
+        get unquote(route_options[:path]),
+          unquote(route_options[:controller]),
+          unquote(route_options[:action]),
+          as: unquote(route_options[:as])
       end
     end
   end
 
   defp options_for_route(route, options) when is_list(options) do
     path       = route_path(route, options[:path])
-    controller = options[:controller] || Addict.Controller
+    controller = options[:controller] || Addict.AddictController
     action     = options[:action] || route
     as         = route
 
