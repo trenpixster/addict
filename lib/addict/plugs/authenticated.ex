@@ -22,7 +22,7 @@ defmodule Addict.Plugs.Authenticated do
   """
   def call(conn, _) do
     conn = fetch_session(conn)
-
+    not_logged_in_url = Addict.Configs.not_logged_in_url || "/login"
     if is_logged_in(get_session(conn, :current_user)) do
       assign(conn, :current_user, get_session(conn, :current_user))
     else
@@ -35,10 +35,6 @@ defmodule Addict.Plugs.Authenticated do
       nil -> false
       _   -> true
     end
-  end
-
-  def not_logged_in_url do
-    Application.get_env(:addict, :not_logged_in_url, "/error")
   end
 
 end
