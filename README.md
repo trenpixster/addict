@@ -3,75 +3,68 @@
 
 # Addict
 
-Addict allows you to manage users authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
+Addict allows you to manage users registration and authentication on your [Phoenix Framework](http://www.phoenixframework.org) app easily.
 
-## What does it?
+## What does it do?
 For now, it enables your users to register, login, logout and recover/reset their passwords.
+
+## Requirements
+
+Addict is dependent on an ecto [User Model](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L18) and a [Database connection interface](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L12).
+
+The user model must have at least the following schema:
+```elixir
+  field :email, :string
+  field :encrypted_password, :string
+```
+
+## Plug and go
+1 - Add Addict to your dependencies:
+```
+ {:addict, "~> 0.5"}
+```
+2 - Generate Addict [configs](docs/configs.md) via:
+```
+mix addict.generate.configs
+```
+3 - Generate ([opinionated](#gen_boilerplate)) boilerplate:
+```
+mix addict.generate.boilerplate
+```
+4 - Add Addict routes to your `router.ex`:
+```elixir
+defmodule YourApp.Router do
+  (...)
+  use Addict.RoutesHelper
+  (...)
+  scope "/" do
+    addict :routes
+  end
+end
+```
+5 - Visit any of these paths on your app
+```
+/login
+/register
+/recover_password
+/reset_password
+```
 
 ## On what does it depend?
 Addict depends on:
 - [Phoenix Framework](http://www.phoenixframework.org)
 - [Ecto](https://github.com/elixir-lang/ecto)
 
-Optionally you can make Addict send e-mails for you too. At the moment only [Mailgun](https://mailgun.com) is supported.
+Optionally you can make Addict send e-mails for you too. At the moment only [Mailgun](https://mailgun.com) is supported. Feel free to contribute with [another service](#mailers)!
 
-## How can I get it started?
+## Addict Configs
 
-Addict is dependent on an ecto [User Model](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L18) and a [Database connection interface](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L12).
-
-The user model must have at least the following schema:
-```
-  id serial primary key,
-  email varchar(200),
-  username varchar(200),
-  hash varchar(130),
-  recovery_hash varchar(130),
-  CONSTRAINT u_constraint UNIQUE (email)
-```
-
-There are some application configurations you must add to your `configs.exs`:
-
-```elixir
-config :addict, not_logged_in_url: "/error",  # the URL where users will be redirected to
-                db: MyApp.MyRepo,
-                user: MyApp.MyUser,
-                register_from_email: "Registration <welcome@yourawesomeapp.com>", # email registered users will receive from address
-                register_subject: "Welcome to yourawesomeapp!", # email registered users will receive subject
-                password_recover_from_email: "Password Recovery <no-reply@yourawesomeapp.com>",
-                password_recover_subject: "You requested a password recovery link",
-                email_templates: MyApp.MyEmailTemplates # email templates for sending e-mails, more on this further down
-
-```
-
-Environment specific configuration options go into their respective `config/*.exs`.
-```elixir
-config :addict, mailgun_domain: "yourawesomeapp.com",
-                mailgun_key: "apikey-secr3tzapik3y"
-```
-
-The `email_templates` configuration should point to a module with the following structure:
-```elixir
-defmodule MyApp.MyEmailTemplates do
-  def register_template(user) do
-    """
-      <h1>This is the HTML the user will receive upon registering</h1>
-      You can access the user attributes: #{user.email}
-    """
-  end
-
-  def password_recovery_template(user) do
-    """
-      <h1>This is the HTML the user will receive upon requesting a new password</h1>
-      You should provide a link to your app where the token will be processed:
-      <a href="http://yourawesomeapp.com/recover_password?token=#{user.recovery_hash}">like this</a>
-    """
-  end
-end
-```
+See all available configurations [here](docs/configs.md).
 
 ## How can I use it?
 
 ### Routes
+
 Add the following to your `router.ex`:
 
 ```elixir
@@ -116,61 +109,13 @@ recover_password_path  POST  /password/recover  Addict.Controller.recover_passwo
   reset_password_path  POST  /password/reset    Addict.Controller.reset_password/2
 ```
 
-### Login/Register
-**Please note:** The routes are all POST routes, meaning you need to create your own form (or similar) for registering and login in.
+### Interacting with Addict
 
-`AddictController.login/2` and `AddictController.register/2` both render a JSON upon success.
-In the following example Rails's `jquery-ujs` was used to add functionality for sending forms asynchronously.
-
-To install `jquery-ujs` add it to the dependencies in your `bower.json`. If that file does not exist, create it:
-
-```JSON
-{
-  "name": "myawesomeapp",
-  "dependencies": {
-    "jquery-ujs": "~1.0.3"
-  }
-}
-```
-
-#### Example Forms
-**Please note:** Currently the addict controller expects the params non-nested (i.e. `params[user_param]`, not `params[user][user_param]`).
-
-```HTML
-<h1>Login</h1>
-
-<%= form_tag login_path(@conn, :login), method: :post, "data-remote": true,
-      id: "login", do: fn -> %>
-  <div class="form-group">
-    <label>E-Mail</label>
-    <input type="email" name="email" class="form-control"/>
-  </div>
-
-  <div class="form-group">
-    <label>Password</label>
-    <input type="password" name="password" class="form-control"/>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Login", class: "btn btn-primary" %>
-  </div>
-<% end %>
-```
-
-##### Handling the response with Javascript
-Since we added the 'data-remote' attribute from `jquery-ujs` to the form we don't see anything
-when we submit the form. It is sent asyncrhonously and we need to handle the response with Javascript,
-for example with the following snippet in your `web/static/app.js`.
-
-```Javascript
-$("form#login").on("ajax:success", function(){
-  window.location = "/" // redirect wherever you want to after login
-}).on("ajax:error", function(){
-  $(".alert-danger").html("Unable to login.");
-});
-```
-
-If this does not work, make sure you have `<script src="<%= static_path(@conn, "/js/app.js") %>"></script>` at the end of your HTML body in your layout (e.g. `web/templates/layouts/application.html.eex`) or surround the code with jQuery's document ready handler.
+After you've added the router and generated the configs, please take look at the optional boilerplate and the Example App. Here are the interesting bits:
+- [Example AJAX interactions](https://github.com/trenpixster/addict/blob/master/boilerplate/addict.js)
+- [AJAX Error Handling](https://github.com/trenpixster/addict/blob/master/boilerplate/addict.js#L67)
+- [Restricted login path](https://github.com/trenpixster/addict/blob/master/example_app/web/controllers/page_controller.ex#L3)
+- [Login Form](https://github.com/trenpixster/addict/blob/master/boilerplate/login.html.eex)
 
 ## Checking for authentication
 Use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
@@ -190,23 +135,8 @@ end
 
 If the user is not logged in and requests for the above action, he will be redirected to `not_logged_in_url`.
 
-## Extending
-
-If you need to extend controller of manager behaviour you can do it. You just have to create new modules and `use` Base modules:
-
-```elixir
-    defmodule ExtendedManagerInteractor do
-      use Addict.BaseManagerInteractor
-
-      defp validate_params(user_params) do
-      ...
-      end
-
-    end
-```
-
-
 ## TODO
+Add missing docs
 Check the [issues](https://github.com/trenpixster/addict/issues) on this repository to check or track the ongoing improvements and new features.
 
 ## Contributing
