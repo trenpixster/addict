@@ -22,10 +22,6 @@ defmodule AuthenticatedTest do
     {:ok, %{conn: conn}}
   end
 
-  test "not_logged_in_url" do
-    assert Auth.not_logged_in_url == "/error"
-  end
-
   test "assign current_user when logged in", context do
     conn = context.conn
       |> put_session(:current_user, "bob")
@@ -43,6 +39,6 @@ defmodule AuthenticatedTest do
 
     assert conn.halted
     assert conn.status in 300..399
-    assert get_resp_header(conn, "location") == [Auth.not_logged_in_url]
+    assert get_resp_header(conn, "location") == ["/login"]
   end
 end
