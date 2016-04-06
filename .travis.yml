@@ -1,8 +1,12 @@
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database addict_test;' -U postgres
 language: elixir
 elixir:
-  - 1.0.4
+  - 1.2.0
 otp_release:
-  - 17.3
+  - 18.2.1
 sudo: false
 notifications:
   recipients:
