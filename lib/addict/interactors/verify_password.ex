@@ -1,6 +1,4 @@
 defmodule Addict.Interactors.VerifyPassword do
-  import Ecto.Query
-
   @doc """
   Verifies if the password for the user is valid
 

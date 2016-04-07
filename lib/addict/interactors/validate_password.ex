@@ -10,10 +10,10 @@ defmodule Addict.Interactors.ValidatePassword do
     call(changeset, [])
   end
 
-  def call(changeset, strategies \\ []) do
+  def call(changeset, strategies) do
     if Enum.count(strategies) == 0, do: strategies = [:default]
 
-    messages = strategies
+    strategies
     |> Enum.reduce(changeset, fn (strategy, acc) ->
       validate(strategy, acc)
     end)
@@ -33,7 +33,7 @@ defmodule Addict.Interactors.ValidatePassword do
   end
 
   defp validate(:default, changeset) do
-    Ecto.Changeset.validate_change(changeset, :password, fn (field, value) ->
+    Ecto.Changeset.validate_change(changeset, :password, fn (_field, value) ->
       validate(:default, value)
     end).errors
   end
