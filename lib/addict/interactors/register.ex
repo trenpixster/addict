@@ -1,8 +1,14 @@
 defmodule Addict.Interactors.Register do
   alias Addict.Interactors.{ValidateUserForRegistration, InsertUser, InjectHash}
 
+  @doc """
+  Executes the user registration flow: parameters validation, password hash generation, user insertion and e-mail sending.
+  Also applies custom defined `Addict.Configs.extra_validation/2`.
+
+  Returns `{:ok, user}` or `{:error, [errors]}`
+  """
   def call(user_params, configs \\ Addict.Configs) do
-    extra_validation = configs.extra_validation || fn (a,b) -> a end
+    extra_validation = configs.extra_validation || fn (a,_) -> a end
 
     {valid, errors} = ValidateUserForRegistration.call(user_params)
     user_params = InjectHash.call user_params

@@ -1,4 +1,9 @@
 defmodule Addict.Interactors.GeneratePasswordResetLink do
+  @doc """
+  Generates a ready to use password reset path. The generated token is timestamped.
+
+  Returns the password reset path with a token and it's respective signature.
+  """
   def call(user_id, secret \\ Addict.Configs.secret_key, reset_path \\ Addict.Configs.reset_password_path) do
     current_time = to_string(:erlang.system_time(:seconds))
     reset_string = Base.encode16 "#{current_time},#{user_id}"

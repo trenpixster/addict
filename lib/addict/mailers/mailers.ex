@@ -1,4 +1,7 @@
 defmodule Addict.Mailers do
+  @moduledoc """
+  Sends e-mail using the configured mail service on `Addict.Configs.mail_service`
+  """
   require Logger
 
   def send_email(to, from, subject, html_body, mail_service \\ Addict.Configs.mail_service) do
@@ -11,7 +14,7 @@ defmodule Addict.Mailers do
   end
 
   defp do_send_email(to, from, subject, html_body, mail_service) do
-    mail_service = to_string(mail_service) |> String.capitalize
+    mail_service = to_string(mail_service) |> Mix.Utils.camelize
     mailer = Module.concat Addict.Mailers, mail_service
     mailer.send_email(to, from, subject, html_body)
   end

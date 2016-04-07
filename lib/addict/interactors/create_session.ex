@@ -1,6 +1,11 @@
 defmodule Addict.Interactors.CreateSession do
   import Plug.Conn
 
+  @doc """
+  Adds `user` as `:current_user` to the session in `conn`
+
+  Returns `{:ok, conn}`
+  """
   def call(conn, user) do
     conn = conn
     |> fetch_session

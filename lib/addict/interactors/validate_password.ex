@@ -1,5 +1,11 @@
 defmodule Addict.Interactors.ValidatePassword do
 
+  @doc """
+  Validates a password according to the defined strategies.
+  For now, only the `:default` strategy exists: password must be at least 6 chars long.
+
+  Returns `{:ok, []}` or `{:error, [errors]}`
+  """
   def call(changeset, nil) do
     call(changeset, [])
   end

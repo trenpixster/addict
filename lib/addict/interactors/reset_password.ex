@@ -2,6 +2,11 @@ defmodule Addict.Interactors.ResetPassword do
   alias Addict.Interactors.{GetUserById, UpdateUserPassword, ValidatePassword}
   require Logger
 
+  @doc """
+  Executes the password reset flow: parameters validation, password hash generation, user updating.
+
+  Returns `{:ok, user}` or `{:error, [errors]}`
+  """
   def call(params) do
     token     = params["token"]
     password  = params["password"]

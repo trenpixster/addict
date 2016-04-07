@@ -1,4 +1,7 @@
 defmodule Addict.Mailers.MailSender do
+  @moduledoc """
+  Sends register and reset token e-mails
+  """
   require Logger
 
   def send_register(user_params) do

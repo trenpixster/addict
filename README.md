@@ -138,14 +138,13 @@ If the user is not logged in and requests for the above action, he will be redir
 ## Adding Custom Mailer
 
 For adding a custom Mailer just follow the conventions:
-- Module must be `Addict.Mailers.Theemailprovider`
+- Module must be `Addict.Mailers.TheEmailProvider`
 - Add the Mailer file in `/lib/addict/mailers`
 - Make sure the mailer implements the behaviour defined [here](https://github.com/trenpixster/addict/blob/master/lib/addict/mailers/generic.ex)
 
-Once that is done, just set `mail_service` configuration to `:theemailprovider`.
+Once that is done, just set `mail_service` configuration to `:the_email_provider`.
 
 ## TODO
-Add missing docs
 Check the [issues](https://github.com/trenpixster/addict/issues) on this repository to check or track the ongoing improvements and new features.
 
 ## Contributing

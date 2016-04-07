@@ -1,6 +1,16 @@
 defmodule Addict.AddictController do
+  @moduledoc """
+  Controller for addict
+
+  Responsible for handling requests for serving templates (GETs) and managing users (POSTs)
+  """
   use Phoenix.Controller
 
+  @doc """
+  Registers a user. Invokes `Addict.Configs.post_register/3` afterwards.
+
+  Requires to have at least `"email"` and "`password`" on `user_params`
+  """
   def register(%{method: "POST"} = conn, user_params) do
     user_params = parse(user_params)
     result = with {:ok, user} <- Addict.Interactors.Register.call(user_params),
@@ -13,6 +23,9 @@ defmodule Addict.AddictController do
     end
   end
 
+  @doc """
+  Renders registration layout
+  """
   def register(%{method: "GET"} = conn, _) do
     csrf_token = generate_csrf_token
     conn
@@ -20,6 +33,11 @@ defmodule Addict.AddictController do
     |> render("register.html", csrf_token: csrf_token)
   end
 
+  @doc """
+  Logs in a user. Invokes `Addict.Configs.post_login/3` afterwards.
+
+  Requires to have at least `"email"` and "`password`" on `auth_params`
+  """
   def login(%{method: "POST"} = conn, auth_params) do
     auth_params = parse(auth_params)
     result = with {:ok, user} <- Addict.Interactors.Login.call(auth_params),
@@ -32,12 +50,21 @@ defmodule Addict.AddictController do
      end
   end
 
+  @doc """
+  Renders login layout
+  """
   def login(%{method: "GET"} = conn, _) do
     csrf_token = generate_csrf_token
     conn
     |> put_addict_layout
     |> render("login.html", csrf_token: csrf_token)
   end
+
+  @doc """
+  Logs out the user. Invokes `Addict.Configs.post_logout/3` afterwards.
+
+  No required params, it removes the session from the user.
+  """
 
   def logout(%{method: "POST"} = conn, _) do
      case Addict.Interactors.DestroySession.call(conn) do
@@ -46,6 +73,11 @@ defmodule Addict.AddictController do
      end
   end
 
+  @doc """
+  Recover user password. Sends an e-mail with a reset password link. Invokes `Addict.Configs.post_recover_password/3` afterwards.
+
+  Requires to have `"email"` on `user_params`
+  """
   def recover_password(%{method: "POST"} = conn, user_params) do
     user_params = parse(user_params)
     email = user_params["email"]
@@ -55,6 +87,9 @@ defmodule Addict.AddictController do
     end
   end
 
+  @doc """
+  Renders Password Recovery layout
+  """
   def recover_password(%{method: "GET"} = conn, _) do
     csrf_token = generate_csrf_token
     conn
@@ -62,6 +97,11 @@ defmodule Addict.AddictController do
     |> render("recover_password.html", csrf_token: csrf_token)
   end
 
+  @doc """
+  Resets the user password. Invokes `Addict.Configs.post_reset_password/3` afterwards.
+
+  Requires to have  `"token"`, `"signature"` and "`password`" on `params`
+  """
   def reset_password(%{method: "POST"} = conn, params) do
     params = parse(params)
     case Addict.Interactors.ResetPassword.call(params) do
@@ -70,6 +110,9 @@ defmodule Addict.AddictController do
     end
   end
 
+  @doc """
+  Renders Password Reset layout
+  """
   def reset_password(%{method: "GET"} = conn, params) do
     csrf_token = generate_csrf_token
     token = params["token"]
@@ -91,7 +134,7 @@ defmodule Addict.AddictController do
   defp return_error(conn, errors, custom_fn) do
     if custom_fn == nil, do: custom_fn = fn (a,_,_) -> a end
     errors = errors |> Enum.map(fn {key, value} ->
-      %{message: "#{String.capitalize(Atom.to_string(key))}: #{value}"}
+      %{message: "#{Mix.Utils.camelize(Atom.to_string(key))}: #{value}"}
     end)
     conn
     |> custom_fn.(:error, errors)

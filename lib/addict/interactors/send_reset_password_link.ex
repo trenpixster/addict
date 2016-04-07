@@ -2,6 +2,11 @@ defmodule Addict.Interactors.SendResetPasswordEmail do
   alias Addict.Interactors.{GetUserByEmail, GeneratePasswordResetLink}
   require Logger
 
+  @doc """
+  Executes the password recovery flow: verifies if the user exists and sends the e-mail with the reset link
+
+  Either returns `{:ok, user}` or `{:ok, nil}`. `{:ok, nil}` is returned when e-mail is not found to avoid user enumeration.
+  """
   def call(email, configs \\ Addict.Configs) do
     {result, user} = GetUserByEmail.call(email)
 

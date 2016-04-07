@@ -7,6 +7,12 @@ defmodule Addict.PasswordUser do
   end
 end
 
+@doc """
+Validates if the user is valid for insertion.
+Checks if `password` is valid and if `email` is well formatted and unique.
+
+Returns `{:ok, []}` or `{:error, [errors]}`
+"""
 defmodule Addict.Interactors.ValidateUserForRegistration do
   import Ecto.Changeset
   alias Addict.Interactors.ValidatePassword
