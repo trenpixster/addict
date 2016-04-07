@@ -18,7 +18,11 @@ defmodule ExampleApp.Web do
 
   def model do
     quote do
-      use Ecto.Model
+      use Ecto.Schema
+
+      import Ecto
+      import Ecto.Changeset
+      import Ecto.Query, only: [from: 1, from: 2]
     end
   end
 
@@ -27,10 +31,11 @@ defmodule ExampleApp.Web do
       use Phoenix.Controller
 
       alias ExampleApp.Repo
-      import Ecto.Model
-      import Ecto.Query, only: [from: 2]
+      import Ecto
+      import Ecto.Query, only: [from: 1, from: 2]
 
       import ExampleApp.Router.Helpers
+      import ExampleApp.Gettext
     end
   end
 
@@ -45,6 +50,8 @@ defmodule ExampleApp.Web do
       use Phoenix.HTML
 
       import ExampleApp.Router.Helpers
+      import ExampleApp.ErrorHelpers
+      import ExampleApp.Gettext
     end
   end
 
@@ -59,9 +66,9 @@ defmodule ExampleApp.Web do
       use Phoenix.Channel
 
       alias ExampleApp.Repo
-      import Ecto.Model
-      import Ecto.Query, only: [from: 2]
-
+      import Ecto
+      import Ecto.Query, only: [from: 1, from: 2]
+      import ExampleApp.Gettext
     end
   end
 

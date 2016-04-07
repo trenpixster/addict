@@ -1,0 +1,15 @@
+<div>
+  <div>
+    <span>Name</span>
+    <span><input type="text" placeholder="Name"></input></span>
+  </div>
+  <div>
+    <span>E-mail</span>
+    <span><input type="text" placeholder="E-mail"></input></span>
+  </div>
+  <div>
+    <span>Password</span>
+    <span><input type="password"></input></span>
+  </div>
+
+</div>

@@ -1,97 +1,173 @@
-defmodule Addict.BaseController do
+defmodule Addict.AddictController do
   @moduledoc """
-    Addict BaseController is used as a base to be extended by controllers if needed.
-    BaseController has functions to receive User related requests directly from
-    the Phoenix router.  Adds `register/2`, `logout/2` and `login/2` as public functions.
-   """
+  Controller for addict
 
-  defmacro __using__(_) do
-    quote do
+  Responsible for handling requests for serving templates (GETs) and managing users (POSTs)
+  """
+  use Phoenix.Controller
 
-      @manager Application.get_env(:addict, :manager) || Addict.ManagerInteractor
-      alias Addict.SessionInteractor
+  @doc """
+  Registers a user. Invokes `Addict.Configs.post_register/3` afterwards.
 
-      @doc """
-        Entry point for registering new users.
+  Requires to have at least `"email"` and "`password`" on `user_params`
+  """
+  def register(%{method: "POST"} = conn, user_params) do
+    user_params = parse(user_params)
+    result = with {:ok, user} <- Addict.Interactors.Register.call(user_params),
+                  {:ok, conn} <- Addict.Interactors.CreateSession.call(conn, user),
+              do: {:ok, conn, user}
 
-       `params` needs to include email, password and username.
-        Returns a JSON response in the format `{message: text, user: %User{}}` with status `201` for
-        successful creation, or `400` for when an error occurs.
-        On success, it also logs the new user in.
-      """
-      def register(conn, user_params) do
-        {conn, message} = @manager.create(user_params)
-        |> SessionInteractor.register(conn)
-        json conn, message
-      end
-
-      @doc """
-        Entry point for logging out users.
-
-        Since it only deletes session data, it should always return a JSON response
-        in the format `{message: "logged out"}` with a `200` status code.
-       """
-      def logout(conn, _) do
-        {conn, message} = SessionInteractor.logout(conn)
-        json conn, message
-      end
-
-      @doc """
-        Entry point for logging users in.
-
-        Params needs to be populated with `email` and `password`. It returns `200`
-        status code along with the JSON response `{message: "logged in", user: %User{}` or `400`
-        with `{message: "invalid email or password"}`
-
-       """
-      def login(conn, params) do
-        email = params["email"]
-        password = params["password"]
-
-        {conn, message} = @manager.verify_password(email, password)
-        |> SessionInteractor.login(conn)
-        json conn, message
-      end
-
-      @doc """
-       Entry point for asking for a new password.
-
-       Params need to be populated with `email`
-      """
-      def recover_password(conn, params) do
-        email = params["email"]
-
-        {conn, message} = @manager.recover_password(email)
-        |> SessionInteractor.password_recover(conn)
-        json conn, message
-      end
-
-      @doc """
-       Entry point for setting a user's password given the reset token.
-
-       Params needed to be populated with `token`, `password` and `password_confirm`
-      """
-      def reset_password(conn, params) do
-        token = params["token"]
-        password = params["password"]
-        password_confirm = params["password_confirm"]
-
-        {conn, message} = @manager.reset_password(token, password, password_confirm)
-        |> SessionInteractor.password_reset(conn)
-        json conn, message
-      end
-
-      defoverridable Module.definitions_in(__MODULE__)
+    case result do
+      {:ok, conn, user} -> return_success(conn, user, Addict.Configs.post_register, 201)
+      {:error, errors} -> return_error(conn, errors, Addict.Configs.post_register)
     end
   end
-end
 
-defmodule Addict.Controller do
-  @moduledoc """
-   Default controller used by Addict
-   """
-  use Phoenix.Controller
-  plug :action
-  use Addict.BaseController
+  @doc """
+  Renders registration layout
+  """
+  def register(%{method: "GET"} = conn, _) do
+    csrf_token = generate_csrf_token
+    conn
+    |> put_addict_layout
+    |> render("register.html", csrf_token: csrf_token)
+  end
+
+  @doc """
+  Logs in a user. Invokes `Addict.Configs.post_login/3` afterwards.
+
+  Requires to have at least `"email"` and "`password`" on `auth_params`
+  """
+  def login(%{method: "POST"} = conn, auth_params) do
+    auth_params = parse(auth_params)
+    result = with {:ok, user} <- Addict.Interactors.Login.call(auth_params),
+                  {:ok, conn} <- Addict.Interactors.CreateSession.call(conn, user),
+              do: {:ok, conn, user}
+
+     case result do
+       {:ok, conn, user} -> return_success(conn, user, Addict.Configs.post_login)
+       {:error, errors} -> return_error(conn, errors, Addict.Configs.post_login)
+     end
+  end
+
+  @doc """
+  Renders login layout
+  """
+  def login(%{method: "GET"} = conn, _) do
+    csrf_token = generate_csrf_token
+    conn
+    |> put_addict_layout
+    |> render("login.html", csrf_token: csrf_token)
+  end
+
+  @doc """
+  Logs out the user. Invokes `Addict.Configs.post_logout/3` afterwards.
+
+  No required params, it removes the session from the user.
+  """
+
+  def logout(%{method: "POST"} = conn, _) do
+     case Addict.Interactors.DestroySession.call(conn) do
+       {:ok, conn} -> return_success(conn, %{}, Addict.Configs.post_logout)
+       {:error, errors} -> return_error(conn, errors, Addict.Configs.post_logout)
+     end
+  end
+
+  @doc """
+  Recover user password. Sends an e-mail with a reset password link. Invokes `Addict.Configs.post_recover_password/3` afterwards.
+
+  Requires to have `"email"` on `user_params`
+  """
+  def recover_password(%{method: "POST"} = conn, user_params) do
+    user_params = parse(user_params)
+    email = user_params["email"]
+    case Addict.Interactors.SendResetPasswordEmail.call(email) do
+      {:ok, _} -> return_success(conn, %{}, Addict.Configs.post_recover_password)
+      {:error, errors} -> return_error(conn, errors, Addict.Configs.post_recover_password)
+    end
+  end
+
+  @doc """
+  Renders Password Recovery layout
+  """
+  def recover_password(%{method: "GET"} = conn, _) do
+    csrf_token = generate_csrf_token
+    conn
+    |> put_addict_layout
+    |> render("recover_password.html", csrf_token: csrf_token)
+  end
+
+  @doc """
+  Resets the user password. Invokes `Addict.Configs.post_reset_password/3` afterwards.
+
+  Requires to have  `"token"`, `"signature"` and "`password`" on `params`
+  """
+  def reset_password(%{method: "POST"} = conn, params) do
+    params = parse(params)
+    case Addict.Interactors.ResetPassword.call(params) do
+      {:ok, _} -> return_success(conn, %{}, Addict.Configs.post_reset_password)
+      {:error, errors} -> return_error(conn, errors, Addict.Configs.post_reset_password)
+    end
+  end
+
+  @doc """
+  Renders Password Reset layout
+  """
+  def reset_password(%{method: "GET"} = conn, params) do
+    csrf_token = generate_csrf_token
+    token = params["token"]
+    signature = params["signature"]
+    conn
+    |> put_addict_layout
+    |> render("reset_password.html", token: token, signature: signature, csrf_token: csrf_token)
+  end
+
+  defp return_success(conn, user, custom_fn, status \\ 200) do
+    if custom_fn == nil, do: custom_fn = fn(a,_,_) -> a end
+
+    conn
+    |> put_status(status)
+    |> custom_fn.(:ok, user)
+    |> json(Addict.Presenter.strip_all(user))
+  end
+
+  defp return_error(conn, errors, custom_fn) do
+    if custom_fn == nil, do: custom_fn = fn (a,_,_) -> a end
+    errors = errors |> Enum.map(fn {key, value} ->
+      %{message: "#{Mix.Utils.camelize(Atom.to_string(key))}: #{value}"}
+    end)
+    conn
+    |> custom_fn.(:error, errors)
+    |> put_status(400)
+    |> json(%{errors: errors})
+  end
+
+  defp put_addict_layout(conn) do
+    conn
+    |> put_layout({Addict.AddictView, "addict.html"})
+  end
+
+  defp generate_csrf_token do
+    if Addict.Configs.generate_csrf_token != nil do
+      Addict.Configs.generate_csrf_token.()
+    else
+      ""
+    end
+  end
+
+  defp parse(user_params) do
+    if user_params[schema_name_string] != nil do
+      user_params[schema_name_string]
+    else
+      user_params
+    end
+  end
+
+  defp schema_name_string do
+    to_string(Addict.Configs.user_schema)
+    |> String.split(".")
+    |> Enum.at(-1)
+    |> String.downcase
+  end
 
 end

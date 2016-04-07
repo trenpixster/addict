@@ -1,0 +1,8 @@
+<div class="jumbotron">
+  <h2>If you're here, you are logged in!</h2>
+</div>
+
+<div>
+  <span>Here's your user's information:</span>
+  <span><%= Poison.encode!(Addict.Helper.current_user(@conn)) %></span>
+</div>

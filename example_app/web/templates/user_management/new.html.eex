@@ -1,0 +1,5 @@
+<h2>New user</h2>
+
+<%= render "register.html", action: "/register", csrf_token: @csrf_token %>
+
+<%= link "Back", to: user_management_path(@conn, :index) %>
