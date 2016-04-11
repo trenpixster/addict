@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Addict.Generate.Configs do
       default_configs = default_configs <> """
         mailgun_domain: "#{mailgun_domain}",
         mailgun_key: "#{mailgun_api_key}",
-        mail_service: [:mailgun]
+        mail_service: :mailgun
       """
     else
       default_configs = default_configs <> "mail_service: nil"

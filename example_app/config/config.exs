@@ -36,7 +36,7 @@ config :addict,
   from_email: "no-reply@example.com", # CHANGE THIS
   mailgun_domain: "CHANGE THIS",
   mailgun_key: "CHANGE THIS",
-  mail_service: [:mailgun],
+  mail_service: :mailgun,
   post_register: fn(conn, status, model) ->
                   IO.inspect status
                   IO.inspect model
