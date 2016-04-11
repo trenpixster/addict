@@ -55,6 +55,6 @@ defmodule Addict.Mixfile do
     {ref, 0} = System.cmd("git", ["rev-parse", "--verify", "--quiet", "HEAD"])
     [source_ref: ref,
      main: "README",
-     extras: ["README.md"]]
+     extras: ["README.md","configs.md"]]
     end
 end

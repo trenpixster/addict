@@ -23,7 +23,7 @@ The user model must have at least the following schema:
 ```
  {:addict, "~> 0.2"}
 ```
-2 - Generate Addict [configs](docs/configs.md) via:
+2 - Generate Addict [configs](https://github.com/trenpixster/addict/blob/master/configs.md) via:
 ```
 mix addict.generate.configs
 ```
@@ -59,7 +59,7 @@ Optionally you can make Addict send e-mails for you too. At the moment only [Mai
 
 ## Addict Configs
 
-See all available configurations [here](docs/configs.md).
+See all available configurations [here](https://github.com/trenpixster/addict/blob/master/configs.md).
 
 ## How can I use it?
 
