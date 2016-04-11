@@ -37,8 +37,9 @@ defmodule Addict.Mixfile do
 
   defp package do
     [
-         files: ["lib", "boilerplate", "docs", "mix.exs", "README*", "LICENSE*"],
+         files: ["lib", "boilerplate", "docs", "mix.exs", "README*", "LICENSE*", "configs*"],
          contributors: ["Nizar Venturini"],
+         maintainers: ["Nizar Venturini"],
          licenses: ["MIT"],
          links: %{"GitHub" => "https://github.com/trenpixster/addict"}
     ]
