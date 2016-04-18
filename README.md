@@ -55,7 +55,7 @@ Addict depends on:
 - [Phoenix Framework](http://www.phoenixframework.org)
 - [Ecto](https://github.com/elixir-lang/ecto)
 
-Optionally you can make Addict send e-mails for you too. At the moment only [Mailgun](https://mailgun.com) is supported. Feel free to contribute with [another service](#mailers)!
+Optionally you can make Addict send e-mails for you too. At the moment only [Mailgun](https://mailgun.com) is supported. Feel free to contribute with [another service](#adding-custom-mailer)!
 
 ## Addict Configs
 
