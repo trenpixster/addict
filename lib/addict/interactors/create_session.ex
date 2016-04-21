@@ -6,10 +6,10 @@ defmodule Addict.Interactors.CreateSession do
 
   Returns `{:ok, conn}`
   """
-  def call(conn, user) do
+  def call(conn, user, schema \\ Addict.Configs.user_schema) do
     conn = conn
     |> fetch_session
-    |> put_session(:current_user, Addict.Presenter.strip_all(user))
+    |> put_session(:current_user, Addict.Presenter.strip_all(user, schema))
     {:ok, conn}
   end
 end

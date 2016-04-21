@@ -19,7 +19,7 @@ defmodule CreateSessionTest do
 
     assert Plug.Conn.get_session(conn, :current_user) == nil
 
-    {:ok, conn} = CreateSession.call(conn, fake_user)
+    {:ok, conn} = CreateSession.call(conn, fake_user, TestAddictSchema)
 
     assert Plug.Conn.get_session(conn, :current_user) == fake_user
   end

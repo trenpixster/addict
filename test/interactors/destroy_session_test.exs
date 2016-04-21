@@ -16,7 +16,7 @@ defmodule DestroySessionTest do
     conn = conn(:get, "/")
            |> Plug.Session.call(@session_opts)
            |> fetch_session
-    {:ok, conn} = CreateSession.call(conn, fake_user)
+    {:ok, conn} = CreateSession.call(conn, fake_user, TestAddictSchema)
 
     {:ok, conn} = DestroySession.call(conn)
 
