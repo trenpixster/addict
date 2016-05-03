@@ -6,8 +6,6 @@ defmodule Mix.Tasks.Addict.Generate.Boilerplate do
   embed_text :register, from_file: "./boilerplate/register.html.eex"
   embed_text :reset_password, from_file: "./boilerplate/reset_password.html.eex"
   embed_text :recover_password, from_file: "./boilerplate/recover_password.html.eex"
-  embed_text :addict_js, from_file: "./boilerplate/addict.js"
-  embed_text :addict_css, from_file: "./boilerplate/addict.css"
   embed_template :view, """
   defmodule Addict.AddictView do
     use Phoenix.HTML
@@ -29,7 +27,6 @@ defmodule Mix.Tasks.Addict.Generate.Boilerplate do
 
       create_addict_templates
       create_addict_view
-      create_addict_dependencies
     end
 
     Mix.shell.info "[o] Done!"
@@ -57,16 +54,6 @@ defmodule Mix.Tasks.Addict.Generate.Boilerplate do
     view_file = Path.join(["web", "views", "addict_view.ex"])
                 |> Path.relative_to(Mix.Project.app_path)
     create_file view_file, view_template(base_route_helper: (guess_application_name <> ".Router.Helpers"))
-  end
-
-  defp create_addict_dependencies do
-    create_file Path.join(["priv", "static", "css", "addict.css"])
-                |> Path.relative_to(Mix.Project.app_path),
-                addict_css_text
-
-    create_file Path.join(["priv", "static", "js", "addict.js"])
-                |> Path.relative_to(Mix.Project.app_path),
-                addict_js_text
   end
 
   defp guess_application_name do
