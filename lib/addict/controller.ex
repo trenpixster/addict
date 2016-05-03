@@ -134,7 +134,7 @@ defmodule Addict.AddictController do
   defp return_error(conn, errors, custom_fn) do
     if custom_fn == nil, do: custom_fn = fn (a,_,_) -> a end
     errors = errors |> Enum.map(fn {key, value} ->
-      %{message: "#{Mix.Utils.camelize(Atom.to_string(key))}: #{value}"}
+      %{message: "#{Macro.camelize(Atom.to_string(key))}: #{value}"}
     end)
     conn
     |> custom_fn.(:error, errors)
