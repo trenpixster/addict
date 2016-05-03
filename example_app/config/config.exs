@@ -30,7 +30,7 @@ config :phoenix, :generators,
 
 config :addict,
   secret_key: "2432622431322479506177654c79303442354a5a4b784f592e444f332e",
-  extra_validation: fn ({valid, errors}, user_params) -> {valid, errors} end, # define extra validation here
+  extra_validation: &ExampleApp.User.validate/2, # define extra validation here
   user_schema: ExampleApp.User,
   repo: ExampleApp.Repo,
   from_email: "no-reply@example.com", # CHANGE THIS

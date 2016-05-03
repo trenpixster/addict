@@ -22,4 +22,8 @@ defmodule ExampleApp.User do
     model
     |> cast(params, @required_fields, @optional_fields)
   end
+
+  def validate({valid, errors}, user_params) do
+    {valid, errors}
+  end
 end
