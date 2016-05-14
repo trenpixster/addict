@@ -8,7 +8,6 @@
     <meta name="author" content="">
 
     <title>User Management</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/addict.css") %>">
     <style type="text/css">
       /* Base styles */
       *, *:after, *:before {
@@ -184,8 +183,6 @@
       </main>
 
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/jquery.min.js") %>"></script>
-    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
       var btn_register = document.getElementById("btn-register");
