@@ -13,7 +13,7 @@ defmodule Addict.AddictController do
   """
   def register(%{method: "POST"} = conn, user_params) do
     user_params = parse(user_params)
-    result = with {:ok, user} <- Addict.Interactors.Register.call(user_params),
+    result = with {:ok, user} <- Addict.AuthenticationProvider.register(user_params),
                   {:ok, conn} <- Addict.Interactors.CreateSession.call(conn, user),
               do: {:ok, conn, user}
 
@@ -40,7 +40,7 @@ defmodule Addict.AddictController do
   """
   def login(%{method: "POST"} = conn, auth_params) do
     auth_params = parse(auth_params)
-    result = with {:ok, user} <- Addict.Interactors.Login.call(auth_params),
+    result = with {:ok, user} <- Addict.AuthenticationProvider.login(auth_params),
                   {:ok, conn} <- Addict.Interactors.CreateSession.call(conn, user),
               do: {:ok, conn, user}
 
@@ -81,7 +81,7 @@ defmodule Addict.AddictController do
   def recover_password(%{method: "POST"} = conn, user_params) do
     user_params = parse(user_params)
     email = user_params["email"]
-    case Addict.Interactors.SendResetPasswordEmail.call(email) do
+    case Addict.AuthenticationProvider.recover_password(email) do
       {:ok, _} -> return_success(conn, %{}, Addict.Configs.post_recover_password)
       {:error, errors} -> return_error(conn, errors, Addict.Configs.post_recover_password)
     end
@@ -104,7 +104,7 @@ defmodule Addict.AddictController do
   """
   def reset_password(%{method: "POST"} = conn, params) do
     params = parse(params)
-    case Addict.Interactors.ResetPassword.call(params) do
+    case Addict.AuthenticationProvider.reset_password(params) do
       {:ok, _} -> return_success(conn, %{}, Addict.Configs.post_reset_password)
       {:error, errors} -> return_error(conn, errors, Addict.Configs.post_reset_password)
     end

@@ -19,7 +19,7 @@ defmodule ExampleApp.Mixfile do
   def application do
     [mod: {ExampleApp, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :addict]]
   end
 
   # Specifies which paths to compile per environment.

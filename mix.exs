@@ -12,7 +12,8 @@ defmodule Addict.Mixfile do
   end
 
   def application do
-    [applications: applications(Mix.env)]
+    [mod: {Addict, []},
+     applications: applications(Mix.env)]
   end
 
   defp applications(:test) do
@@ -20,7 +21,7 @@ defmodule Addict.Mixfile do
   end
 
   defp applications(_) do
-    [:phoenix, :ecto, :comeonin, :mailgun, :logger, :crypto]
+      [:phoenix, :ecto, :comeonin, :mailgun, :logger, :crypto]
   end
 
   defp deps do
