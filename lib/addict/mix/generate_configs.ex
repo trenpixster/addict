@@ -52,7 +52,7 @@ defmodule Mix.Tasks.Addict.Generate.Configs do
           :ok <- File.close(file),
       do: {data}
 
-    String.contains?(data, "config :addict")
+    Regex.match?  ~r/config :addict\s*?,/, data
   end
 
   defp add_addict_configs(configs_path, user_schema, repo, use_mailgun, mailgun_domain, mailgun_api_key) do
