@@ -118,6 +118,14 @@ After you've added the router and generated the configs, please take look at the
 - [Restricted login path](https://github.com/trenpixster/addict/blob/master/example_app/web/controllers/page_controller.ex#L3)
 - [Login Form](https://github.com/trenpixster/addict/blob/master/boilerplate/login.html.eex)
 
+### Addict Helper
+
+Addict saves information on the logged in user by setting `current_user` on the user's Session.
+You might want to use the `Addict.Helper` module that encapsulates this logic:
+
+- [`Addict.Helper.current_user/1`](https://hexdocs.pm/addict/Addict.Helper.html#current_user/1): Provided the `conn`, it returns the user model's hash representation, without any associations.
+- [`Addict.Helper.is_logged_in/1`](https://hexdocs.pm/addict/Addict.Helper.html#is_logged_in/1): Provided the `conn`, it returns `true` if the user is logged in, `false` otherwise.
+
 ## Checking for authentication
 Use `Addict.Plugs.Authenticated` plug to validate requests on your controllers:
 ```elixir
