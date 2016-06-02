@@ -8,7 +8,6 @@
     <meta name="author" content="">
 
     <title>User Management</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/addict.css") %>">
     <style type="text/css">
       /* Base styles */
       *, *:after, *:before {
@@ -184,8 +183,6 @@
       </main>
 
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/jquery.min.js") %>"></script>
-    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
       var btn_register = document.getElementById("btn-register");
@@ -226,10 +223,11 @@
         });
       }
 
-      function makeRequest(url, data, csrf_token, success_callback, failure_callback) {
+      function makeRequest(url, data, csrf_token, success_callback, failure_callback, method) {
         clearErrors();
+        method = method || "POST";
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("POST", url);
+        xmlHttp.open(method, url);
         xmlHttp.setRequestHeader("x-csrf-token", csrf_token);
         xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlHttp.onreadystatechange = function() {
@@ -264,7 +262,7 @@
       if(btn_logout){
         document.getElementById("btn-logout").addEventListener("click", function(ev) {
           var csrf_token = document.getElementById('csrf-token').value;
-          makeRequest('/logout', {}, csrf_token, navigateToRoot);
+          makeRequest('/logout', {}, csrf_token, navigateToRoot, null, "DELETE");
         }, false);
       }
 

@@ -14,7 +14,7 @@
         <a href="/login">Login</a>
       </li>
       <li>
-        <a href="#" onclick="javascript:$.post('/logout')">Logout</a>
+        <a href="#" onclick='javascript:$.ajax({url:"/logout", method: "DELETE"})'>Logout</a>
       </li>
       <li>
         <a href="/recover_password">Recover Password</a>
