@@ -6,21 +6,24 @@ defmodule Addict.RoutesHelper do
   end
 
   defmacro addict(:routes, options \\ %{}) do
-    routes = [:register, :login, :logout, :recover_password, :reset_password]
+    routes = [
+      {:register, [:get, :post]},
+      {:login, [:get, :post]},
+      {:recover_password, [:get, :post]},
+      {:reset_password, [:get, :post]},
+      {:logout, [:delete]}
+    ]
 
-    for route <- routes do
+    for {route, methods} <- routes do
       route_options = options_for_route(route, options[route])
-
-      quote do
-        post unquote(route_options[:path]),
+      for method <- methods do
+        quote do
+          unquote(method)(
+          unquote(route_options[:path]),
           unquote(route_options[:controller]),
           unquote(route_options[:action]),
-          as: unquote(route_options[:as])
-
-        get unquote(route_options[:path]),
-          unquote(route_options[:controller]),
-          unquote(route_options[:action]),
-          as: unquote(route_options[:as])
+          as: unquote(route_options[:as]))
+        end
       end
     end
   end
@@ -33,6 +36,7 @@ defmodule Addict.RoutesHelper do
 
     %{path: path, controller: controller, action: action, as: as}
   end
+
   defp options_for_route(route, path) do
     options_for_route(route, [path: route_path(route, path)])
   end

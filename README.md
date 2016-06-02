@@ -84,11 +84,11 @@ end
 This will generate the following routes:
 
 ```
-        register_path  POST  /register          Addict.Controller.register/2
-           login_path  POST  /login             Addict.Controller.login/2
-          logout_path  POST  /logout            Addict.Controller.logout/2
-recover_password_path  POST  /recover_password  Addict.Controller.recover_password/2
-  reset_password_path  POST  /reset_password    Addict.Controller.reset_password/2
+        register_path  POST   / register          Addict.Controller.register/2
+           login_path  POST   / login             Addict.Controller.login/2
+          logout_path  DELETE / logout            Addict.Controller.logout/2
+recover_password_path  POST   / recover_password  Addict.Controller.recover_password/2
+  reset_password_path  POST   / reset_password    Addict.Controller.reset_password/2
 ```
 
 You can also override the `path` or `controller`/`action` for a given route:
@@ -103,11 +103,11 @@ addict :routes,
 These overrides will generate the following routes:
 
 ```
-        register_path  POST  /register          Addict.Controller.register/2
-           login_path  POST  /login             Addict.Controller.login/2
-          logout_path  POST  /sign-out          ExampleApp.UserController.sign_out/2
-recover_password_path  POST  /password/recover  Addict.Controller.recover_password/2
-  reset_password_path  POST  /password/reset    Addict.Controller.reset_password/2
+        register_path  POST   / register          Addict.Controller.register/2
+           login_path  POST   / login             Addict.Controller.login/2
+          logout_path  DELETE / sign-out          ExampleApp.UserController.sign_out/2
+recover_password_path  POST   / password/recover  Addict.Controller.recover_password/2
+  reset_password_path  POST   / password/reset    Addict.Controller.reset_password/2
 ```
 
 ### Interacting with Addict

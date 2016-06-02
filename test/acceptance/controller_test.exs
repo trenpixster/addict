@@ -83,7 +83,7 @@ defmodule ControllerTest do
     Application.put_env(:addict, :user_schema, TestAddictSchema)
     Application.put_env(:addict, :repo, TestAddictRepo)
 
-    conn = conn(:post, "/logout", nil)
+    conn = conn(:delete, "/logout", nil)
            |> with_session
            |> Plug.Conn.put_session(:current_user, %{email: "john.doe@example.com"})
            |> TestAddictRouter.call(@opts)
