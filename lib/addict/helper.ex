@@ -16,6 +16,6 @@ Addict Helper functions
   Returns a boolean
   """
   def is_logged_in(conn) do
-    current_user(conn) != "null"
+    current_user(conn) != nil
   end
 end
