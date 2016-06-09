@@ -137,4 +137,12 @@ If you're using CSRF token generation, use the `generate_csrf_token` configurati
 
 # Not Logged in Redirect
 
-When using the `Addict.Plugs.Authenticated`, if the user isn't logged in, it will be redirected to `"/login"`. You may change the path by setting the url or path in `not_logged_in_url`.
+When using the `Addict.Plugs.Authenticated`, if the user isn't logged in, it will be redirected to `"/login"`. You may change the path by setting the url or path in `not_logged_in_url`:
+
+```elixir
+# config.exs
+
+config :addict,
+  (...),
+  not_logged_in_url: "/some/other/path"
+```
