@@ -5,6 +5,6 @@ defmodule Addict.Interactors.GenerateEncryptedPassword do
   Returns the hash as a String
   """
   def call(password) do
-    Comeonin.Pbkdf2.hashpwsalt password
+    Addict.Configs.password_hasher.hashpwsalt password
   end
 end
