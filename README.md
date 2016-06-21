@@ -142,7 +142,7 @@ defmodule MyAwesomeApp.PageController do
 end
 ```
 
-If the user is not logged in and requests for the above action, he will be redirected to `not_logged_in_url`.
+If the user is not logged in and requests for the above action, they will be redirected to `not_logged_in_url`.
 
 ## Adding Custom Mailer
 
