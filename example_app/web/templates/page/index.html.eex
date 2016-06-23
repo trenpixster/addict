@@ -1,7 +1,7 @@
 <div class="row medium-padding">
   <div class="col-lg-12">
     <p style='text-align: right;'>
-      <%= if Addict.Helper.current_user(@conn) do %>
+      <%= if Addict.Helper.is_logged_in(@conn) do %>
         Hi, <%= Addict.Helper.current_user(@conn).email %>!
       <% else %>
         You are not logged in.
