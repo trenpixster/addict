@@ -1,3 +1,15 @@
+<div class="row medium-padding">
+  <div class="col-lg-12">
+    <p style='text-align: right;'>
+      <%= if Addict.Helper.is_logged_in(@conn) do %>
+        Hi, <%= Addict.Helper.current_user(@conn).email %>!
+      <% else %>
+        You are not logged in.
+      <% end %>
+    </p>
+  </div>
+</div>
+
 <div class="jumbotron">
   <h2><%= gettext "Welcome to %{name}", name: "Addict(ed) Phoenix!" %></h2>
   <p class="lead"><i>don't worry about user management</i></p>
@@ -7,24 +19,29 @@
   <div class="col-lg-6">
     <h4>User management</h4>
     <ul>
-      <li>
-        <a href="/register">Register</a>
-      </li>
-      <li>
-        <a href="/login">Login</a>
-      </li>
-      <li>
-        <a href="#" onclick='javascript:$.ajax({url:"/logout", method: "DELETE"})'>Logout</a>
-      </li>
-      <li>
-        <a href="/recover_password">Recover Password</a>
-      </li>
-      <li>
-        <a href="/reset_password">Reset Password</a>
-      </li>
+      <%= if Addict.Helper.current_user(@conn) do %>
+        <li>
+          <a href="#" class='logout-link'>Logout</a>
+        </li>
+      <% else %>
+        <li>
+          <a href="/register">Register</a>
+        </li>
+        <li>
+          <a href="/login">Login</a>
+        </li>
+        <li>
+          <a href="/recover_password">Recover Password</a>
+        </li>
+        <li>
+          <a href="/reset_password">Reset Password</a>
+        </li>
+      <% end %>
+
       <li>
         <a href="/required_login">Page available for logged in users only</a>
       </li>
+
     </ul>
   </div>
 
@@ -37,3 +54,9 @@
     </ul>
   </div>
 </div>
+
+<script type='text/javascript'>
+  $('.logout-link').click(function() {
+    $.ajax({url:"/logout", method: "DELETE"}).done(function() { window.location.reload(); });
+  });
+</script>
