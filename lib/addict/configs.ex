@@ -26,4 +26,8 @@ defmodule Addict.Configs do
          end
        end)
 
+  def password_hasher do
+    Application.get_env(:addict, :password_hasher, Comeonin.Pbkdf2)
+  end
+
 end

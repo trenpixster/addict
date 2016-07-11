@@ -146,3 +146,7 @@ config :addict,
   (...),
   not_logged_in_url: "/some/other/path"
 ```
+
+# Password Hasher
+
+You can use the `password_hasher` configuration to specify a module to perform the encrypting and decrypting of passwords. The module must implement `hashpwsalt/1` and `checkpw/2`.

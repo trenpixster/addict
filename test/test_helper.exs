@@ -1,6 +1,7 @@
 Logger.configure(level: :info)
 ExUnit.start
 
+Code.require_file "./support/dumb_hasher.exs", __DIR__
 Code.require_file "./support/schema.exs", __DIR__
 Code.require_file "./support/repo.exs", __DIR__
 Code.require_file "./support/router.exs", __DIR__
