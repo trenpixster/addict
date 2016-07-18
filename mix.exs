@@ -3,7 +3,7 @@ defmodule Addict.Mixfile do
 
   def project do
     [app: :addict,
-     version: "0.2.5",
+     version: "0.3.0",
      elixir: "~> 1.2",
      description: description,
      package: package,
@@ -26,11 +26,11 @@ defmodule Addict.Mixfile do
   defp deps do
     [{:cowboy, "~> 1.0"},
      {:phoenix, "~> 1.1"},
-     {:ecto, "~> 1.1"},
+     {:ecto, "~> 2.0"},
      {:comeonin, "~> 2.1" },
      {:mailgun, "~> 0.1"},
      {:mock, "~> 0.1.3", only: :test},
-     {:postgrex, ">= 0.0.0", only: :test},
+     {:postgrex, "~> 0.11", only: :test},
      {:earmark, "~> 0.2", only: :dev},
      {:ex_doc, "~> 0.11", only: :dev}]
   end
