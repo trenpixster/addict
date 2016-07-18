@@ -9,14 +9,10 @@ Code.require_file "./support/migrations.exs", __DIR__
 
 defmodule Addict.RepoSetup do
   use ExUnit.CaseTemplate
-  setup_all do
-    Ecto.Adapters.SQL.begin_test_transaction(TestAddictRepo, [])
-    on_exit fn -> Ecto.Adapters.SQL.rollback_test_transaction(TestAddictRepo, []) end
-    :ok
-  end
 
   setup do
-    Ecto.Adapters.SQL.restart_test_transaction(TestAddictRepo, [])
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(TestAddictRepo)
+    Ecto.Adapters.SQL.Sandbox.mode(TestAddictRepo, {:shared, self()})
     :ok
   end
 end
@@ -32,9 +28,11 @@ defmodule Addict.SessionSetup do
   end
 end
 
-_ = Ecto.Storage.down(TestAddictRepo)
-_ = Ecto.Storage.up(TestAddictRepo)
+
+_ = Ecto.Adapters.Postgres.storage_down(TestAddictRepo.config)
+_ = Ecto.Adapters.Postgres.storage_up(TestAddictRepo.config)
 
 {:ok, _pid} = TestAddictRepo.start_link
 _ = Ecto.Migrator.up(TestAddictRepo, 0, TestAddictMigrations, log: false)
 Process.flag(:trap_exit, true)
+
