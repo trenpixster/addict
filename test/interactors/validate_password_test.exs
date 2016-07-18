@@ -20,6 +20,6 @@ defmodule ValidatePasswordTest do
   test "it validates the default use case" do
     changeset = %Addict.PasswordUser{} |> Ecto.Changeset.cast(%{password: "123"}, ~w(password),[])
     {:error, errors} = ValidatePassword.call(changeset, [])
-    assert errors == [password: "is too short"]
+    assert errors == [password: {"is too short", []}]
   end
 end

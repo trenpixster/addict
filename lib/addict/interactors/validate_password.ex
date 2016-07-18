@@ -29,7 +29,7 @@ defmodule Addict.Interactors.ValidatePassword do
   end
 
   defp validate(:default, password) when is_bitstring(password) do
-    if String.length(password) > 5, do: [], else: [{:password, "is too short"}]
+    if String.length(password) > 5, do: [], else: [{:password, {"is too short", []}}]
   end
 
   defp validate(:default, changeset) do

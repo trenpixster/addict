@@ -16,6 +16,7 @@ Returns `{:ok, []}` or `{:error, [errors]}`
 """
   import Ecto.Changeset
   alias Addict.Interactors.ValidatePassword
+
   def call(user_params, configs \\ Addict.Configs) do
     struct(configs.user_schema)
     |> cast(user_params, ~w(email), ~w())
@@ -30,6 +31,7 @@ Returns `{:ok, []}` or `{:error, [errors]}`
   end
 
   defp format_response(errors) do
+    errors = Enum.map errors, fn ({key, {value, _}}) -> {key, value} end
     {:error, errors}
   end
 
