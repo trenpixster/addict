@@ -30,35 +30,15 @@ config :phoenix, :generators,
 
 config :addict,
   secret_key: "2432622431322479506177654c79303442354a5a4b784f592e444f332e",
-  extra_validation: &ExampleApp.User.validate/2, # define extra validation here
+  extra_validation: {ExampleApp.User, :validate}, # define extra validation here
   user_schema: ExampleApp.User,
   repo: ExampleApp.Repo,
   from_email: "no-reply@example.com", # CHANGE THIS
   mailgun_domain: "https://api.mailgun.net/v3/CHANGE-THIS",
   mailgun_key: "key-CHANGE-THIS",
   mail_service: :mailgun,
-  post_register: fn(conn, status, model) ->
-                  IO.inspect status
-                  IO.inspect model
-                  conn
-                end,
-  post_login: fn(conn, status, model) ->
-                  IO.inspect status
-                  IO.inspect model
-                  conn
-                end,
-  post_logout: fn(conn, status, model) ->
-                  IO.inspect status
-                  IO.inspect model
-                  conn
-                end,
-  post_reset_password: fn(conn, status, model) ->
-                  IO.inspect status
-                  IO.inspect model
-                  conn
-                end,
-  post_recover_password: fn(conn, status, model) ->
-                  IO.inspect status
-                  IO.inspect model
-                  conn
-                end
+  post_register: {ExampleApp, :post_register_hook},
+  post_login: {ExampleApp, :post_login_hook},
+  post_logout: {ExampleApp, :post_logout_hook},
+  post_reset_password: {ExampleApp, :post_reset_password_hook},
+  post_recover_password: {ExampleApp, :post_recover_password_hook}

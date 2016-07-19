@@ -19,7 +19,7 @@ defmodule ExampleApp.Mixfile do
   def application do
     [mod: {ExampleApp, []},
      applications: [:phoenix, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :phoenix_pubsub]]
+                    :phoenix_ecto, :postgrex, :phoenix_pubsub, :addict]]
   end
 
   # Specifies which paths to compile per environment.
@@ -38,6 +38,7 @@ defmodule ExampleApp.Mixfile do
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
+     {:exrm, "~> 1.0"},
      {:addict, path: "../"}]
   end
 
