@@ -18,4 +18,24 @@ Addict Helper functions
   def is_logged_in(conn) do
     current_user(conn) != nil
   end
+
+  @doc """
+  Utility helper for executing Config defined functions
+  """
+
+  def exec(nil, _) do
+    nil
+  end
+
+  def exec({mod, func}, args) do
+    :erlang.apply mod, func, args
+  end
+
+  def exec(func, []) do
+    :erlang.apply func, []
+  end
+
+  def exec(func, args) do
+    :erlang.apply func, args
+  end
 end

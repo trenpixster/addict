@@ -11,8 +11,8 @@ defmodule Addict.Interactors.Register do
     extra_validation = configs.extra_validation || fn (a,_) -> a end
 
     {valid, errors} = ValidateUserForRegistration.call(user_params)
-    user_params = InjectHash.call user_params
-    {valid, errors} = extra_validation.({valid, errors}, user_params)
+    user_params     = InjectHash.call user_params
+    {valid, errors} = Addict.Helper.exec extra_validation, [{valid, errors}, user_params]
 
     case {valid, errors} do
        {:ok, _} -> do_register(user_params, configs)

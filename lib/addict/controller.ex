@@ -148,7 +148,7 @@ defmodule Addict.AddictController do
 
   defp generate_csrf_token do
     if Addict.Configs.generate_csrf_token != nil do
-      Addict.Configs.generate_csrf_token.()
+      Addict.Helper.exec Addict.Configs.generate_csrf_token, []
     else
       ""
     end
