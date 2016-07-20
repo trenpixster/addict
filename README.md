@@ -22,7 +22,7 @@ The user model must have at least the following schema:
 ## Plug and go
 1 - Add Addict to your dependencies:
 ```
- {:addict, "~> 0.2"}
+ {:addict, "~> 0.3"}
 ```
 2 - Generate Addict [configs](https://github.com/trenpixster/addict/blob/master/configs.md) via:
 ```
