@@ -122,21 +122,28 @@ defmodule Addict.AddictController do
   end
 
   defp return_success(conn, user, custom_fn, status \\ 200) do
-    if custom_fn == nil, do: custom_fn = fn(a,_,_) -> a end
-
     conn
     |> put_status(status)
-    |> custom_fn.(:ok, user)
+    |> invoke_hook(custom_fn, :ok, user)
     |> json(Addict.Presenter.strip_all(user))
   end
 
+  defp invoke_hook(conn, custom_fn, status, params) do
+    f = case custom_fn do
+      {module, method} -> &apply(module, method, [&1,&2,&3])
+      nil              -> fn(a,_,_) -> a end
+      fun              -> fun
+    end
+
+    f.(conn, status, params)
+  end
+
   defp return_error(conn, errors, custom_fn) do
-    if custom_fn == nil, do: custom_fn = fn (a,_,_) -> a end
     errors = errors |> Enum.map(fn {key, value} ->
       %{message: "#{Macro.camelize(Atom.to_string(key))}: #{value}"}
     end)
     conn
-    |> custom_fn.(:error, errors)
+    |> invoke_hook(custom_fn, :error, errors)
     |> put_status(400)
     |> json(%{errors: errors})
   end
