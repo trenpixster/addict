@@ -90,6 +90,7 @@
         height: 1.7rem;
         line-height: 2rem;
         bottom: 0;
+        left: 0;
         color: #999;
         transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
