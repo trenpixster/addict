@@ -90,6 +90,7 @@
         height: 1.7rem;
         line-height: 2rem;
         bottom: 0;
+        left: 0;
         color: #999;
         transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
@@ -244,7 +245,18 @@
         xmlHttp.send(JSON.stringify(data));
       }
 
+      function triggerButtonClickOnEnter(button) {
+        document.addEventListener('keypress', function (e) {
+          var key = e.which || e.keyCode;
+          if (key === 13) {
+            button.click();
+          }
+        });
+      }
+
       if(btn_register){
+        triggerButtonClickOnEnter(btn_register);
+
         document.getElementById("btn-register").addEventListener("click", function(ev) {
           var name = document.getElementById('txt-name').value;
           var email = document.getElementById('txt-email').value;
@@ -267,6 +279,8 @@
       }
 
       if(btn_login){
+        triggerButtonClickOnEnter(btn_login);
+
         document.getElementById("btn-login").addEventListener("click", function(ev) {
           var email = document.getElementById('txt-email').value;
           var password = document.getElementById('txt-password').value;
@@ -280,6 +294,8 @@
       }
 
       if(btn_reset){
+        triggerButtonClickOnEnter(btn_reset);
+
         document.getElementById("btn-reset-password").addEventListener("click", function(ev) {
           var password = document.getElementById('txt-password').value;
           var token = document.getElementById('token').value;
@@ -296,6 +312,8 @@
       }
 
       if(btn_send){
+        triggerButtonClickOnEnter(btn_send);
+
         document.getElementById("btn-send-reset-password-link").addEventListener("click", function(ev) {
           var email = document.getElementById('txt-email').value;
           var csrf_token = document.getElementById('csrf-token').value;
