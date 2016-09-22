@@ -24,6 +24,10 @@ The user model must have at least the following schema:
 ```
  {:addict, "~> 0.3"}
 ```
+1a - Note that mailgun locks Poison to an old 1.4 version, which may cause conflicts (Poison). There's a fix in place that just hasn't been pushed to hex. Resolve by also adding to your dependencies:
+```
+ {:mailgun, github: "chrismccord/mailgun", branch: "master", override: true}
+```
 2 - Generate Addict [configs](https://github.com/trenpixster/addict/blob/master/configs.md) via:
 ```
 mix addict.generate.configs
