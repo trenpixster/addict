@@ -14,19 +14,25 @@ defmodule Mix.Tasks.Addict.Generate.Configs do
       Mix.shell.info "[o] Generating Addict configuration"
 
       guessed = Mix.shell.yes? "Is your application root module #{base_module}?"
-      base_module = unless guessed do
-        Mix.shell.prompt("Please insert your application root module:") |> String.rstrip
-      end
+      base_module = 
+        case guessed do
+          true -> base_module
+          false -> Mix.shell.prompt("Please insert your application root module:") |> String.rstrip
+        end
 
       guessed = Mix.shell.yes? "Is your Ecto Repository module #{repo}?"
-      repo = unless guessed do
-        Mix.shell.prompt("Please insert your Ecto Repository module:") |> String.rstrip
-      end
+      repo = 
+        case guessed do
+          true -> repo
+          false -> Mix.shell.prompt("Please insert your Ecto Repository module:") |> String.rstrip
+        end
 
       guessed = Mix.shell.yes? "Is your User Schema module #{user_schema}?"
-      user_schema = unless guessed do
-        Mix.shell.prompt("Please insert your User Schema module:") |> String.rstrip
-      end
+      user_schema = 
+        case guessed do
+          true -> user_schema
+          false -> Mix.shell.prompt("Please insert your User Schema module:") |> String.rstrip
+        end
 
       use_mailgun = Mix.shell.yes? "Will you be using Mailgun?"
       mailgun_domain = 
