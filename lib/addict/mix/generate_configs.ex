@@ -10,31 +10,36 @@ defmodule Mix.Tasks.Addict.Generate.Configs do
       base_module = guess_application_name
       user_schema = "#{base_module}.User"
       repo        = "#{base_module}.Repo"
-      mailgun_domain = ""
-      mailgun_api_key = ""
 
       Mix.shell.info "[o] Generating Addict configuration"
 
       guessed = Mix.shell.yes? "Is your application root module #{base_module}?"
-      unless guessed do
-        base_module = Mix.shell.prompt("Please insert your application root module:") |> String.rstrip
+      base_module = unless guessed do
+        Mix.shell.prompt("Please insert your application root module:") |> String.rstrip
       end
 
       guessed = Mix.shell.yes? "Is your Ecto Repository module #{repo}?"
-      unless guessed do
-        repo = Mix.shell.prompt("Please insert your Ecto Repository module:") |> String.rstrip
+      repo = unless guessed do
+        Mix.shell.prompt("Please insert your Ecto Repository module:") |> String.rstrip
       end
 
       guessed = Mix.shell.yes? "Is your User Schema module #{user_schema}?"
-      unless guessed do
-        user_schema = Mix.shell.prompt("Please insert your User Schema module:") |> String.rstrip
+      user_schema = unless guessed do
+        Mix.shell.prompt("Please insert your User Schema module:") |> String.rstrip
       end
 
       use_mailgun = Mix.shell.yes? "Will you be using Mailgun?"
-      if use_mailgun do
-        mailgun_domain  = Mix.shell.prompt("Please insert your Mailgun domain: (e.g.: https://api.mailgun.net/v3/sandbox123456.mailgun.org)") |> String.rstrip
-        mailgun_api_key = Mix.shell.prompt("Please insert your Mailgun API key:") |> String.rstrip
-      end
+      mailgun_domain = 
+        case use_mailgun do
+          true -> Mix.shell.prompt("Please insert your Mailgun domain: (e.g.: https://api.mailgun.net/v3/sandbox123456.mailgun.org)") |> String.rstrip
+          false -> ""
+        end
+
+      mailgun_api_key = 
+        case use_mailgun do 
+          true -> Mix.shell.prompt("Please insert your Mailgun API key:") |> String.rstrip
+          false -> ""
+        end
 
       add_addict_configs(configs_path, user_schema, repo, use_mailgun, mailgun_domain, mailgun_api_key)
     end
@@ -70,14 +75,14 @@ defmodule Mix.Tasks.Addict.Generate.Configs do
       from_email: "no-reply@example.com", # CHANGE THIS
     """
 
-    if use_mailgun do
-      default_configs = default_configs <> """
+    default_configs = if use_mailgun do
+      default_configs <> """
         mailgun_domain: "#{mailgun_domain}",
         mailgun_key: "#{mailgun_api_key}",
         mail_service: :mailgun
       """
     else
-      default_configs = default_configs <> "mail_service: nil"
+      default_configs <> "mail_service: nil"
     end
 
     IO.write(file, default_configs)

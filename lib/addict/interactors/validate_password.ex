@@ -11,7 +11,11 @@ defmodule Addict.Interactors.ValidatePassword do
   end
 
   def call(changeset, strategies) do
-    if Enum.count(strategies) == 0, do: strategies = [:default]
+    strategies = 
+      case Enum.count(strategies) do
+        0 -> [:default]
+        _ -> strategies
+      end
 
     strategies
     |> Enum.reduce(changeset, fn (strategy, acc) ->
