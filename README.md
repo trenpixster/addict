@@ -11,7 +11,7 @@ For now, it enables your users to register, login, logout and recover/reset thei
 
 ## Requirements
 
-Addict is dependent on an ecto [User Model](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L18) and a [Database connection interface](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L12).
+Addict is dependent on an ecto *User* [model](https://github.com/elixir-ecto/ecto/blob/v2.0/examples/friends/lib/friends/person.ex#L4) and a [database connection interface](https://github.com/elixir-ecto/ecto/blob/v2.0/examples/friends/lib/friends/repo.ex#L1).
 
 The user model must have at least the following schema:
 ```elixir
