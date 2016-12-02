@@ -11,7 +11,7 @@ For now, it enables your users to register, login, logout and recover/reset thei
 
 ## Requirements
 
-Addict is dependent on an ecto [User Model](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L18) and a [Database connection interface](https://github.com/elixir-lang/ecto/blob/master/examples/simple/lib/simple.ex#L12).
+Addict is dependent on an ecto *User* [model](https://github.com/elixir-ecto/ecto/blob/v2.0/examples/friends/lib/friends/person.ex#L4) and a [database connection interface](https://github.com/elixir-ecto/ecto/blob/v2.0/examples/friends/lib/friends/repo.ex#L1).
 
 The user model must have at least the following schema:
 ```elixir
@@ -23,6 +23,10 @@ The user model must have at least the following schema:
 1 - Add Addict to your dependencies:
 ```
  {:addict, "~> 0.3"}
+```
+1a - Note that mailgun locks Poison to an old 1.4 version, which may cause conflicts (Poison). There's a fix in place that just hasn't been pushed to hex. Resolve by also adding to your dependencies:
+```
+ {:mailgun, github: "chrismccord/mailgun", branch: "master", override: true}
 ```
 2 - Generate Addict [configs](https://github.com/trenpixster/addict/blob/master/configs.md) via:
 ```
