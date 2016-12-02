@@ -40,7 +40,12 @@ defmodule Addict.Interactors.ResetPassword do
   end
 
   defp validate_generation_time(generation_time) do
-    do_validate_generation_time(:erlang.system_time(:seconds) - generation_time <= 86_400)
+    time_to_expiry = if Addict.Configs.password_reset_token_time_to_expiry != nil do
+      Addict.Configs.password_reset_token_time_to_expiry
+    else
+      86_400
+    end
+    do_validate_generation_time(:erlang.system_time(:seconds) - generation_time <= time_to_expiry)
   end
 
   defp do_validate_generation_time(true) do
