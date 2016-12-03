@@ -150,3 +150,15 @@ config :addict,
 # Password Hasher
 
 You can use the `password_hasher` configuration to specify a module to perform the encrypting and decrypting of passwords. The module must implement `hashpwsalt/1` and `checkpw/2`.
+
+# Password Reset Token Time to Expiry
+
+After the password reset email is sent, the reset token will expire in 1 day (86400 seconds). You can set a different length of time (in seconds as an integer) in the config:
+
+```elixir
+# config.exs
+
+config :addict,
+  (...),
+  password_reset_token_time_to_expiry: 120
+```

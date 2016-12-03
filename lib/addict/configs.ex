@@ -19,7 +19,8 @@ defmodule Addict.Configs do
     :email_reset_password_subject,
     :email_reset_password_template,
     :reset_password_path,
-    :repo
+    :repo,
+    :password_reset_token_time_to_expiry
   ] |> Enum.each(fn key ->
          def unquote(key)() do
           Application.get_env(:addict, unquote(key))
