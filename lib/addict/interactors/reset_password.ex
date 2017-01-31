@@ -36,7 +36,13 @@ defmodule Addict.Interactors.ResetPassword do
 
   defp parse_token(token) do
     [generation_time, user_id] = Base.decode16!(token) |> String.split(",")
-    {:ok, String.to_integer(generation_time), String.to_integer(user_id)}
+
+    id = case is_integer(user_id) do
+      true -> String.to_integer(user_id)
+      false -> user_id
+    end
+
+    {:ok, String.to_integer(generation_time), String.to_integer(id)}
   end
 
   defp validate_generation_time(generation_time) do
