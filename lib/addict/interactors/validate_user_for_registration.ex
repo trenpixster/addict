@@ -19,7 +19,8 @@ Returns `{:ok, []}` or `{:error, [errors]}`
 
   def call(user_params, configs \\ Addict.Configs) do
     struct(configs.user_schema)
-    |> cast(user_params, ~w(email), ~w())
+    |> cast(user_params, [:email])
+    |> validate_required(:email)
     |> validate_format(:email, ~r/.+@.+/)
     |> unique_constraint(:email)
     |> validate_password(user_params["password"], configs.password_strategies)
@@ -37,7 +38,8 @@ Returns `{:ok, []}` or `{:error, [errors]}`
 
   defp validate_password(changeset, password, password_strategies) do
     %Addict.PasswordUser{}
-    |> Ecto.Changeset.cast(%{password: password}, ~w(password), [])
+    |> Ecto.Changeset.cast(%{password: password}, [:password])
+    |> Ecto.Changeset.validate_required(:password)
     |> ValidatePassword.call(password_strategies)
     |> do_validate_password(changeset.errors)
   end
