@@ -27,7 +27,7 @@ And add it to the configuration:
 
 config :addict,
   (...),
-  post_login: {MyApp.PostLoginAction, :log}
+  post_login: &(MyApp.PostLoginAction.log/3)
 ```
 
 If you want to take different flows according to the success criteria of the action, you can pattern match the arguments:
