@@ -133,7 +133,15 @@ config :addict,
 
 # CSRF Token
 
-If you're using CSRF token generation, use the `generate_csrf_token` configuration value to pass the function responsible for it.
+If you're using CSRF token generation, use the `generate_csrf_token` configuration value to pass the function responsible for it. For instance on your configuration file:
+
+```elixir
+# config.exs
+
+config :addict,
+  (...),
+  generate_csrf_token: (fn -> Phoenix.Controller.get_csrf_token end)
+```
 
 # Not Logged in Redirect
 
