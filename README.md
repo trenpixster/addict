@@ -43,7 +43,11 @@ defmodule YourApp.Router do
   use Addict.RoutesHelper
   (...)
   scope "/" do
-    addict :routes
+    # Note that the `addict :routes` call should be inside the global
+    # scope rather than your app's scope:
+    # (i.e.: `scope "/", YourApp do: ...` vs `scope "/", do ...`)
+    # otherwise Phoenix won't be able to find Addict's controllers.
+    addict :routes
   end
 end
 ```
